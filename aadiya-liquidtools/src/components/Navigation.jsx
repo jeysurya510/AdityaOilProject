@@ -1,13 +1,26 @@
+// src/components/Navbar.jsx
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Phone, ChevronDown, MessageCircle, Factory, Car, Settings } from 'lucide-react';
+import {
+  Menu,
+  X,
+  Phone,
+  ChevronDown,
+  MessageCircle,
+  Factory,
+  Car,
+  Settings,
+} from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { COMPANY } from '../data/companyInfo.js';
+import logo from '../public/images/logoFin1.png';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const location = useLocation();
 
-  // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
@@ -16,281 +29,287 @@ const Navigation = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Navigation items with dropdowns
   const navItems = [
-    { name: 'Home', href: '#home' },
-    { 
-      name: 'Products', 
-      href: '#products',
+    { name: 'Home', path: '/' },
+    {
+      name: 'Products',
+      path: '/products',
       dropdown: [
+        { name: 'Industrial Oils', icon: <Factory size={16} />, href: '#industrial' },
         { name: 'Automotive Oils', icon: <Car size={16} />, href: '#automotive' },
-        { name: 'Industrial Lubricants', icon: <Factory size={16} />, href: '#industrial' },
-        { name: 'Specialty Greases', icon: <Settings size={16} />, href: '#greases' },
-        { name: 'View All Products', href: '#products', highlight: true }
-      ]
+        { name: 'Greases & Lubricants', icon: <Settings size={16} />, href: '#greases' },
+        { name: 'Specialty Oils', icon: '⚡', href: '#specialty' },
+        { name: 'View All Products', href: '#products', highlight: true },
+      ],
     },
-    { name: 'Applications', href: '#applications' },
     { name: 'Why Us', href: '#whyus' },
     { name: 'Facility', href: '#facility' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'About Us', href: '#about' },
+    { name: 'Contact Us', href: '#contact' },
   ];
+
+  const isActivePath = (item) => {
+    if (item.href && location.hash === item.href) return true;
+    if (item.path && location.pathname === item.path) return true;
+    return false;
+  };
+
+  const scrollToSection = (hash) => {
+    if (!hash) return;
+    const el = document.querySelector(hash);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+      setIsOpen(false);
+    }
+  };
+
+  const handleNavClick = (item, e) => {
+    if (item.href) {
+      e.preventDefault();
+      if (item.href.startsWith('#')) {
+        scrollToSection(item.href);
+      } else {
+        window.location.href = item.href;
+      }
+    }
+  };
 
   return (
     <>
-      {/* Main Navigation */}
+      {/* TOP CONTACT BAR */}
+      <div className="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-2 px-4">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2 text-sm">
+          <div className="flex items-center gap-4">
+            <a
+              href={`tel:${COMPANY.contact.phone}`}
+              className="flex items-center gap-2 hover:text-amber-300"
+            >
+              <Phone size={14} />
+              {COMPANY.contact.phone}
+            </a>
+            <span className="hidden sm:inline">|</span>
+            <a
+              href={`mailto:${COMPANY.contact.email}`}
+              className="hover:text-amber-300"
+            >
+              📧 {COMPANY.contact.email}
+            </a>
+          </div>
+          <div className="text-xs">
+            <span className="text-amber-400 font-medium">
+              CIN: {COMPANY.cin}
+            </span>
+            <span className="mx-2">•</span>
+            <span>Incorporated: {COMPANY.incorporationDate}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* MAIN NAVBAR */}
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.5, type: 'spring' }}
-        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-          scrolled 
-            ? 'bg-white/95 backdrop-blur-xl shadow-2xl py-3' 
-            : 'bg-gradient-to-b from-white/95 to-white/80 backdrop-blur-md py-4'
+        transition={{ duration: 0.5 }}
+        className={`sticky top-0 z-50 w-full transition-all ${
+          scrolled
+            ? 'bg-white/95 backdrop-blur shadow-xl py-3'
+            : 'bg-white py-4 border-b'
         }`}
       >
-        <div className="container-responsive">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between">
-            
-            {/* Logo - Animated */}
-            <motion.div 
-              whileHover={{ scale: 1.05 }}
-              className="flex items-center space-x-3"
+
+            {/* ✅ IMAGE LOGO (TEXT REMOVED, STRUCTURE SAME) */}
+            {/* LOGO + COMPANY NAME */}
+            <motion.a
+              href="/"
+              whileHover={{ scale: 1.03 }}
+              className="flex items-center gap-3"
             >
-              <div className="relative">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-navy to-trust-blue flex items-center justify-center">
-                  <span className="text-white text-2xl font-bold">A</span>
-                  <motion.div 
-                    className="absolute inset-0 rounded-xl border-2 border-premium-amber"
-                    animate={{ 
-                      boxShadow: [
-                        '0 0 0px rgba(245, 158, 11, 0.5)',
-                        '0 0 20px rgba(245, 158, 11, 0.8)',
-                        '0 0 0px rgba(245, 158, 11, 0.5)'
-                      ]
-                    }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  />
+              {/* Logo Image */}
+              <img
+                src={logo}
+                alt="Aadiya Liquidtools Logo"
+                className="h-16 sm:h-20 w-auto object-contain"
+              />
+
+              {/* Company Name */}
+              <div className="leading-tight">
+                <div className="text-lg sm:text-xl font-bold text-gray-900 tracking-wide">
+                  AADIYA LIQUIDTOOLS
+                </div>
+                <div className="text-xs sm:text-sm text-gray-600 font-medium">
+                  India Private Limited
                 </div>
               </div>
-              <div>
-                <motion.h1 
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className="text-xl font-bold text-navy leading-tight"
-                >
-                  AADIYA LIQUIDTOOLS
-                </motion.h1>
-                <p className="text-xs text-gray-600">INDIA PRIVATE LIMITED</p>
-              </div>
-            </motion.div>
+            </motion.a>
 
-            {/* Desktop Navigation */}
+
+            {/* DESKTOP MENU */}
             <div className="hidden lg:flex items-center space-x-1">
               {navItems.map((item) => (
-                <div key={item.name} className="relative group">
-                  <motion.a
-                    href={item.href}
-                    whileHover={{ scale: 1.05 }}
-                    className="px-4 py-2 text-gray-700 hover:text-energy-red font-medium flex items-center gap-1 transition-colors"
-                    onMouseEnter={() => setActiveDropdown(item.name)}
-                    onMouseLeave={() => setActiveDropdown(null)}
-                  >
-                    {item.name}
-                    {item.dropdown && <ChevronDown size={16} className="transition-transform group-hover:rotate-180" />}
-                  </motion.a>
+                <div key={item.name} className="relative">
+                  {item.dropdown ? (
+                    <>
+                      <button
+                        onMouseEnter={() => setActiveDropdown(item.name)}
+                        onMouseLeave={() => setActiveDropdown(null)}
+                        className={`px-4 py-2 flex items-center gap-1 font-medium ${
+                          isActivePath(item)
+                            ? 'text-amber-600'
+                            : 'text-gray-700 hover:text-amber-600'
+                        }`}
+                      >
+                        {item.name}
+                        <ChevronDown size={16} />
+                      </button>
 
-                  {/* Dropdown Menu */}
-                  {item.dropdown && activeDropdown === item.name && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      className="absolute top-full left-0 mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden"
-                      onMouseEnter={() => setActiveDropdown(item.name)}
-                      onMouseLeave={() => setActiveDropdown(null)}
-                    >
-                      {item.dropdown.map((subItem) => (
-                        <a
-                          key={subItem.name}
-                          href={subItem.href}
-                          className={`flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-all ${
-                            subItem.highlight ? 'bg-gradient-to-r from-navy/5 to-trust-blue/5' : ''
-                          }`}
+                      {activeDropdown === item.name && (
+                        <div
+                          onMouseEnter={() => setActiveDropdown(item.name)}
+                          onMouseLeave={() => setActiveDropdown(null)}
+                          className="absolute left-0 top-full mt-2 w-64 bg-white rounded-xl shadow-xl border z-50"
                         >
-                          {subItem.icon && (
-                            <span className={`p-2 rounded-lg ${
-                              subItem.highlight ? 'bg-energy-red text-white' : 'bg-gray-100 text-gray-600'
-                            }`}>
-                              {subItem.icon}
-                            </span>
-                          )}
-                          <span className={`font-medium ${
-                            subItem.highlight ? 'text-energy-red' : 'text-gray-700'
-                          }`}>
-                            {subItem.name}
-                          </span>
-                        </a>
-                      ))}
-                    </motion.div>
+                          {item.dropdown.map((sub) => (
+                            <a
+                              key={sub.name}
+                              href={sub.href}
+                              onClick={(e) => handleNavClick(sub, e)}
+                              className={`flex items-center gap-3 px-5 py-3 hover:bg-gray-50 ${
+                                sub.highlight
+                                  ? 'bg-amber-50 text-amber-600 font-semibold'
+                                  : 'text-gray-700'
+                              }`}
+                            >
+                              {sub.icon && <span>{sub.icon}</span>}
+                              {sub.name}
+                            </a>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  ) : item.href ? (
+                    <a
+                      href={item.href}
+                      onClick={(e) => handleNavClick(item, e)}
+                      className={`px-4 py-2 font-medium ${
+                        isActivePath(item)
+                          ? 'text-amber-600 border-b-2 border-amber-600'
+                          : 'text-gray-700 hover:text-amber-600'
+                      }`}
+                    >
+                      {item.name}
+                    </a>
+                  ) : (
+                    <Link
+                      to={item.path}
+                      className={`px-4 py-2 font-medium ${
+                        isActivePath(item)
+                          ? 'text-amber-600 border-b-2 border-amber-600'
+                          : 'text-gray-700 hover:text-amber-600'
+                      }`}
+                    >
+                      {item.name}
+                    </Link>
                   )}
                 </div>
               ))}
 
-              {/* CTA Buttons */}
+              {/* CTA BUTTONS */}
               <div className="flex items-center gap-3 ml-6">
-                <motion.a
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  href="https://wa.me/916383271397"
+                <a
+                  href={COMPANY.social.whatsapp}
                   target="_blank"
-                  className="flex items-center gap-2 bg-green-600 text-white px-5 py-2.5 rounded-full font-medium hover:bg-green-700 transition shadow-lg hover:shadow-xl"
+                  rel="noreferrer"
+                  className="bg-green-600 text-white px-5 py-2 rounded-full flex items-center gap-2"
                 >
                   <MessageCircle size={18} />
-                  <span>WhatsApp</span>
-                </motion.a>
+                  WhatsApp
+                </a>
 
-                <motion.a
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  href="tel:+919876543210"
-                  className="flex items-center gap-2 bg-gradient-to-r from-energy-red to-premium-amber text-white px-6 py-2.5 rounded-full font-bold hover:shadow-xl transition-all shadow-lg"
+                <a
+                  href={COMPANY.social.call}
+                  className="bg-gradient-to-r from-amber-500 to-orange-600 text-white px-6 py-2 rounded-full flex items-center gap-2 font-bold"
                 >
                   <Phone size={18} />
-                  <span>Call Now</span>
-                </motion.a>
+                  Call Now
+                </a>
               </div>
             </div>
 
-            {/* Mobile Menu Button */}
-            <motion.button
-              whileTap={{ scale: 0.9 }}
+            {/* MOBILE MENU BUTTON */}
+            <button
               onClick={() => setIsOpen(!isOpen)}
-              className="lg:hidden p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition"
+              className="lg:hidden p-2 rounded-lg bg-gray-100"
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </motion.button>
+            </button>
           </div>
         </div>
 
-        {/* Scrolling Progress Bar */}
-        <motion.div 
-          className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-premium-amber to-energy-red"
-          style={{ 
-            width: `${Math.min((window.scrollY / 1000) * 100, 100)}%` 
-          }}
-        />
-      </motion.nav>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden fixed top-20 left-0 right-0 bg-white shadow-2xl z-40 overflow-hidden"
-          >
-            <div className="container-responsive py-6">
-              <div className="space-y-1">
-                {navItems.map((item, index) => (
-                  <motion.div
-                    key={item.name}
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: index * 0.05 }}
-                  >
-                    <a
-                      href={item.href}
-                      onClick={() => setIsOpen(false)}
-                      className="flex items-center justify-between py-4 px-4 text-gray-700 hover:text-energy-red hover:bg-gray-50 rounded-xl transition"
-                    >
-                      <span className="font-medium">{item.name}</span>
-                      {item.dropdown && <ChevronDown size={16} />}
-                    </a>
-                    
-                    {/* Mobile Dropdown */}
-                    {item.dropdown && (
-                      <div className="ml-6 space-y-1">
-                        {item.dropdown.map((subItem) => (
-                          <a
-                            key={subItem.name}
-                            href={subItem.href}
-                            onClick={() => setIsOpen(false)}
-                            className="flex items-center gap-3 py-3 px-4 text-gray-600 hover:text-energy-red hover:bg-gray-50 rounded-lg"
-                          >
-                            {subItem.icon}
-                            {subItem.name}
-                          </a>
-                        ))}
+        {/* MOBILE MENU */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="lg:hidden bg-white border-t shadow-lg"
+            >
+              <div className="px-4 py-6 space-y-4">
+                {navItems.map((item) => (
+                  <div key={item.name}>
+                    {item.dropdown ? (
+                      <div className="space-y-2">
+                        <div className="font-medium text-gray-700 px-2 py-1">
+                          {item.name}
+                        </div>
+                        <div className="ml-4 space-y-2">
+                          {item.dropdown.map((sub) => (
+                            <a
+                              key={sub.name}
+                              href={sub.href}
+                              onClick={(e) => {
+                                handleNavClick(sub, e);
+                                setIsOpen(false);
+                              }}
+                              className={`block px-3 py-2 rounded-lg ${
+                                sub.highlight
+                                  ? 'bg-amber-50 text-amber-600 font-semibold'
+                                  : 'text-gray-600 hover:bg-gray-100'
+                              }`}
+                            >
+                              <div className="flex items-center gap-3">
+                                {sub.icon && <span>{sub.icon}</span>}
+                                {sub.name}
+                              </div>
+                            </a>
+                          ))}
+                        </div>
                       </div>
+                    ) : (
+                      <a
+                        href={item.href}
+                        onClick={(e) => {
+                          handleNavClick(item, e);
+                          setIsOpen(false);
+                        }}
+                        className={`block px-3 py-2 rounded-lg font-medium ${
+                          isActivePath(item)
+                            ? 'bg-amber-50 text-amber-600'
+                            : 'text-gray-700 hover:bg-gray-100'
+                        }`}
+                      >
+                        {item.name}
+                      </a>
                     )}
-                  </motion.div>
+                  </div>
                 ))}
               </div>
-
-              {/* Mobile CTA Buttons */}
-              <motion.div 
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                className="mt-8 space-y-4"
-              >
-                <a
-                  href="tel:+916383271397"
-                  className="flex items-center justify-center gap-3 bg-gradient-to-r from-energy-red to-premium-amber text-white py-4 rounded-xl font-bold text-lg shadow-lg"
-                >
-                  <Phone size={20} />
-                  Call: +91 6383271397
-                </a>
-                
-                <a
-                  href="https://wa.me/916383271397"
-                  target="_blank"
-                  className="flex items-center justify-center gap-3 bg-green-600 text-white py-4 rounded-xl font-medium shadow-lg"
-                >
-                  <MessageCircle size={20} />
-                  WhatsApp Enquiry
-                </a>
-              </motion.div>
-
-              {/* Company Info */}
-              <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
-                className="mt-8 pt-6 border-t border-gray-200"
-              >
-                <div className="text-center text-sm text-gray-500">
-                  <p>🏢 Registered Office: P1. No. 15, 6th Street, Sri Devi Nagar</p>
-                  <p className="mt-1">Kattupakkam, Tiruvallur, Tamil Nadu 600056</p>
-                  <p className="mt-1">📧 sales@aadiyaliquidtools.com</p>
-                  <p className="mt-1">CIN: U46610TN2025PTC182178</p>
-                </div>
-              </motion.div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* WhatsApp Floating Button */}
-      <motion.a
-        href="https://wa.me/919876543210"
-        target="_blank"
-        initial={{ scale: 0, rotate: -180 }}
-        animate={{ scale: 1, rotate: 0 }}
-        transition={{ delay: 1, type: 'spring' }}
-        whileHover={{ scale: 1.1, rotate: 5 }}
-        className="fixed bottom-6 right-6 z-40 w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shadow-2xl shadow-green-500/30"
-      >
-        <MessageCircle size={28} className="text-white" />
-        <motion.span 
-          className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white text-xs rounded-full flex items-center justify-center"
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          🔥
-        </motion.span>
-      </motion.a>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.nav>
     </>
   );
 };

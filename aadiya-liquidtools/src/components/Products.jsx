@@ -1,456 +1,575 @@
+// src/components/Products.jsx - WITH CORRECT IMPORTS
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Filter, Check, Download, ShoppingCart, Zap, Factory, 
-  Car, Settings, Thermometer, Droplets, Gauge, BarChart,
-  ChevronRight, Star, Clock, Shield
+  Factory, Car, Settings, Zap, Droplets, Thermometer,
+  Gauge, Shield, Package, ShoppingCart, Phone, Mail,
+  Filter, ChevronRight, Star, Download, Check,
+  Award, Truck, Clock, Users, Search, X
 } from 'lucide-react';
-import products from '../data/products';
-import confetti from 'canvas-confetti';
+
+// ✅ CORRECT IMPORTS
+// Change this import:
+import { COMPANY as companyInfo, COMPANY_PRODUCTS } from '../data/companyInfo.js';
+
+// Now you can use companyInfo (lowercase) throughout your code
 
 const Products = () => {
-  const [activeTab, setActiveTab] = useState('all');
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [activeSubCategory, setActiveSubCategory] = useState('all');
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [filteredProducts, setFilteredProducts] = useState(products);
-  const [sortBy, setSortBy] = useState('featured');
+  const [filteredProducts, setFilteredProducts] = useState(COMPANY_PRODUCTS);
+  const [searchQuery, setSearchQuery] = useState('');
 
+  // Categories based on products
   const categories = [
-    { id: 'all', label: 'All Products', icon: <Filter size={18} />, count: products.length },
-    { id: 'automotive', label: 'Automotive', icon: <Car size={18} />, count: products.filter(p => p.category === 'automotive').length },
-    { id: 'industrial', label: 'Industrial', icon: <Factory size={18} />, count: products.filter(p => p.category === 'industrial').length },
-    { id: 'greases', label: 'Greases', icon: <Settings size={18} />, count: products.filter(p => p.category === 'greases').length },
-    { id: 'specialty', label: 'Specialty', icon: <Zap size={18} />, count: products.filter(p => p.category === 'specialty').length },
+    { id: 'all', name: 'All Products', icon: '📦' },
+    { id: 'industrial', name: 'Industrial Oils', icon: '🏭' },
+    { id: 'automotive', name: 'Automotive Oils', icon: '🚗' },
+    { id: 'greases', name: 'Greases', icon: '🛢️' },
+    { id: 'metal', name: 'Metal Working Oils', icon: '⚙️' },
+    { id: 'specialty', name: 'Specialty Oils', icon: '⚡' }
   ];
 
-  // Sort products
+  // Filter products
   useEffect(() => {
-    let sorted = [...products];
+    let filtered = [...COMPANY_PRODUCTS];
     
-    if (activeTab !== 'all') {
-      sorted = sorted.filter(p => p.category === activeTab);
+    if (activeCategory !== 'all') {
+      filtered = filtered.filter(p => p.category === activeCategory);
     }
-
-    switch(sortBy) {
-      case 'price-low':
-        sorted.sort((a, b) => parseFloat(a.price.replace('₹', '')) - parseFloat(b.price.replace('₹', '')));
-        break;
-      case 'price-high':
-        sorted.sort((a, b) => parseFloat(b.price.replace('₹', '')) - parseFloat(a.price.replace('₹', '')));
-        break;
-      case 'popular':
-        sorted.sort((a, b) => b.popularity - a.popularity);
-        break;
-      default:
-        // Featured - already sorted
-        break;
+    
+    if (activeSubCategory !== 'all') {
+      filtered = filtered.filter(p => p.subCategory === activeSubCategory);
     }
-
-    setFilteredProducts(sorted);
-  }, [activeTab, sortBy]);
+    
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(p => 
+        p.name.toLowerCase().includes(query) ||
+        p.description.toLowerCase().includes(query) ||
+        p.grade.toLowerCase().includes(query) ||
+        p.applications.some(app => app.toLowerCase().includes(query))
+      );
+    }
+    
+    setFilteredProducts(filtered);
+  }, [activeCategory, activeSubCategory, searchQuery]);
 
   const handleEnquiry = (productName) => {
-    // WhatsApp pre-filled message
-    const message = `Hello Aadiya Liquidtools,\n\nI'm interested in ${productName}. Please share more details and pricing.`;
-    window.open(`https://wa.me/919876543210?text=${encodeURIComponent(message)}`, '_blank');
-    
-    // Confetti effect
-    confetti({
-      particleCount: 30,
-      spread: 60,
-      origin: { y: 0.6 }
-    });
+    const message = `Hello ${companyInfo.name},\n\nI'm interested in ${productName}. Please share technical specifications and pricing.`;
+    window.open(`${companyInfo.social.whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
   const handleQuickView = (product) => {
     setSelectedProduct(product);
-    document.body.style.overflow = 'hidden';
   };
 
   const closeQuickView = () => {
     setSelectedProduct(null);
-    document.body.style.overflow = 'unset';
   };
 
-  // Specifications icons
-  const specIcons = {
-    'Viscosity': <Droplets className="w-4 h-4" />,
-    'Flash Point': <Thermometer className="w-4 h-4" />,
-    'API Grade': <Gauge className="w-4 h-4" />,
-    'Base Oil': <BarChart className="w-4 h-4" />,
-    'Shelf Life': <Clock className="w-4 h-4" />,
-    'Certification': <Shield className="w-4 h-4" />
+  const getCategoryIcon = (category) => {
+    switch(category) {
+      case 'industrial': return <Factory className="w-5 h-5" />;
+      case 'automotive': return <Car className="w-5 h-5" />;
+      case 'greases': return <Settings className="w-5 h-5" />;
+      case 'metal': return <Settings className="w-5 h-5" />;
+      case 'specialty': return <Zap className="w-5 h-5" />;
+      default: return <Package className="w-5 h-5" />;
+    }
+  };
+
+  const getCategoryColor = (category) => {
+    switch(category) {
+      case 'industrial': return 'bg-blue-100 text-blue-700 border-blue-200';
+      case 'automotive': return 'bg-green-100 text-green-700 border-green-200';
+      case 'greases': return 'bg-amber-100 text-amber-700 border-amber-200';
+      case 'metal': return 'bg-gray-100 text-gray-700 border-gray-200';
+      case 'specialty': return 'bg-purple-100 text-purple-700 border-purple-200';
+      default: return 'bg-gray-100 text-gray-700 border-gray-200';
+    }
+  };
+
+  const clearFilters = () => {
+    setActiveCategory('all');
+    setActiveSubCategory('all');
+    setSearchQuery('');
   };
 
   return (
-    <section id="products" className="section-padding bg-gradient-to-b from-gray-50 to-white">
-      <div className="container-responsive">
+    <section id="products" className="py-16 bg-gradient-to-b from-gray-50 to-white">
+      <div className="container mx-auto px-4 max-w-7xl">
         
-        {/* Section Header */}
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-navy/10 to-trust-blue/10 rounded-full mb-4">
-            <Zap className="w-4 h-4 text-premium-amber" />
-            <span className="text-sm font-semibold gradient-text">PRODUCT CATALOG</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 rounded-full mb-4">
+            <Zap className="w-4 h-4 text-amber-500" />
+            <span className="text-sm font-semibold text-blue-700">PRODUCT CATALOG</span>
           </div>
           
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-navy mb-6">
-            Our <span className="gradient-text">Premium</span> Range
-          </h2>
-          
-          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            Our <span className="text-blue-600">Premium</span> Range
+          </h1>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             High-performance lubricants engineered for maximum equipment protection, 
             efficiency, and longevity across all applications.
           </p>
         </motion.div>
 
-        {/* Category Tabs & Filter Bar */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="sticky top-24 z-30 bg-white/80 backdrop-blur-lg rounded-2xl p-4 mb-8 shadow-xl border border-gray-200"
-        >
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-            {/* Category Tabs */}
-            <div className="flex flex-wrap gap-2">
-              {categories.map((cat) => (
-                <motion.button
-                  key={cat.id}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setActiveTab(cat.id)}
-                  className={`flex items-center gap-2 px-4 py-3 rounded-xl font-medium transition-all ${
-                    activeTab === cat.id
-                      ? 'bg-gradient-to-r from-navy to-trust-blue text-white shadow-lg'
+        {/* Features Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+            <Award className="w-10 h-10 text-blue-600 mb-3" />
+            <h4 className="font-bold text-lg mb-2">Quality Certified</h4>
+            <p className="text-gray-600 text-sm">Meeting international quality standards</p>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+            <Truck className="w-10 h-10 text-green-600 mb-3" />
+            <h4 className="font-bold text-lg mb-2">Pan-India Delivery</h4>
+            <p className="text-gray-600 text-sm">Timely supply across all states</p>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+            <Clock className="w-10 h-10 text-amber-600 mb-3" />
+            <h4 className="font-bold text-lg mb-2">Technical Support</h4>
+            <p className="text-gray-600 text-sm">Expert assistance available</p>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+            <Users className="w-10 h-10 text-purple-600 mb-3" />
+            <h4 className="font-bold text-lg mb-2">Bulk Discounts</h4>
+            <p className="text-gray-600 text-sm">Special pricing for industries</p>
+          </div>
+        </div>
+
+        {/* Filters Section */}
+        <div className="mb-8 bg-white rounded-2xl shadow-lg p-6">
+          <div className="grid md:grid-cols-3 gap-6">
+            
+            {/* Category Filter */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <Filter className="inline w-4 h-4 mr-2" />
+                Product Category
+              </label>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => {
+                    setActiveCategory('all');
+                    setActiveSubCategory('all');
+                  }}
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                    activeCategory === 'all'
+                      ? 'bg-blue-600 text-white'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  {cat.icon}
-                  {cat.label}
-                  <span className={`px-2 py-1 text-xs rounded-full ${
-                    activeTab === cat.id 
-                      ? 'bg-white/20 text-white' 
-                      : 'bg-gray-300 text-gray-700'
-                  }`}>
-                    {cat.count}
-                  </span>
-                </motion.button>
-              ))}
+                  All Products
+                </button>
+                {categories.map(cat => (
+                  <button
+                    key={cat.id}
+                    onClick={() => {
+                      setActiveCategory(cat.id);
+                      setActiveSubCategory('all');
+                    }}
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 ${
+                      activeCategory === cat.id
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {cat.icon} {cat.name}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            {/* Sort Dropdown */}
-            <div className="flex items-center gap-4">
-              <span className="text-gray-600 hidden sm:block">Sort by:</span>
-              <select 
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="px-4 py-3 bg-white border-2 border-gray-300 rounded-xl focus:border-energy-red focus:ring-2 focus:ring-energy-red/20 outline-none"
-              >
-                <option value="featured">Featured</option>
-                <option value="popular">Most Popular</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
-              </select>
+            {/* Search */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <Search className="inline w-4 h-4 mr-2" />
+                Search Products
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search by name, grade or application..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                />
+                <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
             </div>
           </div>
-        </motion.div>
+
+          {/* Active Filters */}
+          {(activeCategory !== 'all' || searchQuery) && (
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-sm text-gray-600">Active filters:</span>
+                {activeCategory !== 'all' && (
+                  <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm flex items-center gap-1">
+                    {categories.find(c => c.id === activeCategory)?.name}
+                    <button onClick={() => setActiveCategory('all')} className="ml-1">
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                )}
+                {searchQuery && (
+                  <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-sm flex items-center gap-1">
+                    Search: "{searchQuery}"
+                    <button onClick={() => setSearchQuery('')} className="ml-1">
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                )}
+                <button
+                  onClick={clearFilters}
+                  className="ml-auto text-sm text-red-600 hover:text-red-700 font-medium"
+                >
+                  Clear all filters
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Products Count */}
+        <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="text-gray-600">
+            Showing <span className="font-bold text-blue-600">{filteredProducts.length}</span> products
+            {activeCategory !== 'all' && ` in ${categories.find(c => c.id === activeCategory)?.name}`}
+            {searchQuery && ` matching "${searchQuery}"`}
+          </div>
+          <div className="flex gap-3">
+            <button
+              onClick={() => window.print()}
+              className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 font-medium"
+            >
+              <Download className="w-4 h-4" />
+              Download Catalog
+            </button>
+          </div>
+        </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <AnimatePresence>
-            {filteredProducts.map((product, index) => (
-              <motion.div
-                key={product.id}
-                layout
-                initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ delay: index * 0.1, type: "spring" }}
-                whileHover={{ y: -10 }}
-                className="group"
-              >
-                <div className="bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden h-full flex flex-col">
+        {filteredProducts.length === 0 ? (
+          <div className="text-center py-12 bg-white rounded-2xl shadow">
+            <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <p className="text-gray-500 text-lg mb-2">No products found matching your criteria.</p>
+            <p className="text-gray-400 mb-6">Try changing your filters or search term</p>
+            <button
+              onClick={clearFilters}
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700"
+            >
+              Show All Products
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <AnimatePresence>
+              {filteredProducts.map((product, index) => (
+                <motion.div
+                  key={product.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition-shadow"
+                >
+                  {/* Product Header with Color Badge */}
+                  <div className={`h-2 ${getCategoryColor(product.category).split(' ')[0]}`}></div>
                   
-                  {/* Product Header with Image */}
-                  <div className="relative h-48 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-navy/90 to-trust-blue/90 flex items-center justify-center">
-                      <div className="text-6xl font-bold text-white/20">{product.grade.split(' ')[0]}</div>
-                    </div>
-                    
-                    {/* Category Badge */}
-                    <div className="absolute top-4 left-4">
-                      <div className={`px-3 py-1.5 rounded-full text-xs font-bold text-white ${
-                        product.category === 'automotive' ? 'bg-energy-red' :
-                        product.category === 'industrial' ? 'bg-trust-blue' :
-                        product.category === 'greases' ? 'bg-premium-amber' :
-                        'bg-green-500'
-                      }`}>
-                        {product.category.toUpperCase()}
-                      </div>
-                    </div>
-
-                    {/* Popularity Badge */}
-                    {product.popularity > 4 && (
-                      <div className="absolute top-4 right-4 flex items-center gap-1 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
-                        <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                        <span className="text-xs text-white font-bold">{product.rating}</span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Product Body */}
-                  <div className="p-6 flex-grow">
+                  <div className="p-6">
                     <div className="flex justify-between items-start mb-4">
                       <div>
-                        <h3 className="text-2xl font-bold text-gray-900">{product.name}</h3>
-                        <div className="flex items-center gap-2 mt-2">
-                          <span className="px-3 py-1 bg-blue-100 text-trust-blue rounded-full text-sm font-medium">
-                            {product.grade}
+                        <div className="flex items-center gap-2 mb-2">
+                          {getCategoryIcon(product.category)}
+                          <span className={`text-xs font-semibold px-3 py-1 rounded-full border ${getCategoryColor(product.category)}`}>
+                            {product.category.toUpperCase()}
                           </span>
-                          {product.isNew && (
-                            <span className="px-2 py-1 bg-green-100 text-green-600 rounded-full text-xs">
-                              NEW
-                            </span>
-                          )}
                         </div>
+                        <h3 className="text-xl font-bold text-gray-900">{product.name}</h3>
+                        <p className="text-sm text-gray-600 mt-1">{product.grade}</p>
                       </div>
-                      <div className="text-right">
-                        <div className="text-3xl font-bold gradient-text">{product.price}</div>
-                        <div className="text-sm text-gray-500">per {product.unit}</div>
-                      </div>
+                      {product.featured && (
+                        <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
+                      )}
                     </div>
 
-                    {/* Key Specs */}
-                    <div className="mb-6">
-                      <h4 className="font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                        <Zap className="w-4 h-4 text-premium-amber" />
+                    {product.isNew && (
+                      <div className="inline-block mb-3">
+                        <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded">
+                          NEW ARRIVAL
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Description */}
+                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">{product.description}</p>
+
+                    {/* Key Specifications */}
+                    <div className="mb-4">
+                      <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+                        <Gauge className="w-3 h-3" />
                         Key Specifications
                       </h4>
-                      <div className="grid grid-cols-2 gap-2">
-                        {Object.entries(product.specs).slice(0, 4).map(([key, value]) => (
-                          <div key={key} className="flex items-center justify-between border-b border-gray-100 pb-2">
-                            <span className="text-sm text-gray-600 flex items-center gap-1">
-                              {specIcons[key] || <BarChart className="w-3 h-3" />}
-                              {key}:
-                            </span>
-                            <span className="text-sm font-semibold">{value}</span>
+                      <div className="space-y-1">
+                        {Object.entries(product.specs).slice(0, 3).map(([key, value]) => (
+                          <div key={key} className="flex justify-between text-sm">
+                            <span className="text-gray-600 truncate">{key}:</span>
+                            <span className="font-medium text-gray-900">{value}</span>
                           </div>
                         ))}
                       </div>
                     </div>
 
-                    {/* Applications */}
-                    <div className="mb-6">
-                      <h4 className="font-semibold text-gray-700 mb-2">Applications:</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {product.applications.slice(0, 2).map((app, i) => (
-                          <span key={i} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-lg text-sm">
-                            {app}
-                          </span>
-                        ))}
-                        {product.applications.length > 2 && (
-                          <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-lg text-sm">
-                            +{product.applications.length - 2} more
-                          </span>
-                        )}
+                    {/* Price */}
+                    <div className="mb-4">
+                      <div className="text-2xl font-bold text-blue-600">
+                        {product.price}
+                        <span className="text-sm text-gray-500 font-normal ml-1">/ {product.unit}</span>
                       </div>
                     </div>
 
-                    {/* Packaging Options */}
-                    <div className="mb-6">
-                      <h4 className="font-semibold text-gray-700 mb-2">Available In:</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {product.packaging.map((pkg) => (
-                          <motion.span 
-                            key={pkg}
-                            whileHover={{ scale: 1.1 }}
-                            className="px-3 py-1.5 bg-gradient-to-r from-gray-100 to-gray-50 border border-gray-200 rounded-lg text-sm font-medium"
-                          >
+                    {/* Packaging */}
+                    <div className="mb-4">
+                      <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+                        <Package className="w-3 h-3" />
+                        Packaging
+                      </h4>
+                      <div className="flex flex-wrap gap-1">
+                        {product.packaging.slice(0, 2).map((pkg) => (
+                          <span key={pkg} className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
                             {pkg}
-                          </motion.span>
+                          </span>
                         ))}
+                        {product.packaging.length > 2 && (
+                          <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+                            +{product.packaging.length - 2} more
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="p-6 pt-0 border-t border-gray-100">
-                    <div className="flex gap-3">
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                  <div className="px-6 pb-6 pt-0">
+                    <div className="flex gap-2">
+                      <button
                         onClick={() => handleEnquiry(product.name)}
-                        className="flex-1 bg-gradient-to-r from-energy-red to-premium-amber text-white py-3 rounded-xl font-bold text-center hover:shadow-lg transition-all group/btn"
+                        className="flex-1 bg-green-600 text-white py-2.5 rounded-lg font-medium hover:bg-green-700 flex items-center justify-center gap-2"
                       >
-                        <span className="flex items-center justify-center gap-2">
-                          <ShoppingCart className="w-5 h-5" />
-                          Enquire Now
-                          <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                        </span>
-                      </motion.button>
-                      
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                        <ShoppingCart className="w-4 h-4" />
+                        Quick Enquiry
+                      </button>
+                      <button
                         onClick={() => handleQuickView(product)}
-                        className="px-4 bg-gradient-to-r from-navy to-trust-blue text-white rounded-xl hover:shadow-lg"
+                        className="px-4 py-2.5 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 font-medium"
                       >
-                        <span className="flex items-center">
-                          <span className="hidden sm:inline mr-2">Quick</span>
-                          View
-                        </span>
-                      </motion.button>
+                        Details
+                      </button>
                     </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
+        )}
 
         {/* Bulk Order CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-20 p-8 md:p-12 bg-gradient-to-r from-navy to-trust-blue rounded-3xl text-white overflow-hidden"
-        >
-          <div className="relative z-10">
-            <div className="grid lg:grid-cols-2 gap-8 items-center">
-              <div>
-                <h3 className="text-3xl md:text-4xl font-bold mb-4">
-                  Need Bulk Quantities for Industries?
-                </h3>
-                <p className="text-xl opacity-90 mb-6">
-                  We supply 210L drums directly to factories, workshops, and dealers across India. 
-                  Special pricing for bulk orders.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <motion.a
-                    href="tel:+919876543210"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="inline-flex items-center justify-center gap-3 bg-white text-navy px-8 py-4 rounded-xl text-lg font-bold hover:bg-gray-100"
-                  >
-                    📞 Call for Bulk Quote
-                  </motion.a>
-                  <motion.a
-                    href="mailto:sales@aadiyaliquidtools.com"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="inline-flex items-center justify-center gap-3 border-2 border-white text-white px-8 py-4 rounded-xl text-lg font-bold hover:bg-white/10"
-                  >
-                    ✉️ Email Requirements
-                  </motion.a>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                {['210L Drums', 'Custom Packaging', 'Private Label', 'Pan-India Delivery'].map((item) => (
-                  <div key={item} className="bg-white/10 backdrop-blur-sm p-4 rounded-xl">
-                    <div className="text-2xl font-bold text-premium-amber mb-2">✓</div>
-                    <div className="font-medium">{item}</div>
-                  </div>
-                ))}
+        <div className="mt-16 bg-gradient-to-r from-blue-900 to-blue-700 rounded-2xl p-8 text-white">
+          <div className="grid lg:grid-cols-2 gap-8 items-center">
+            <div>
+              <h3 className="text-2xl font-bold mb-4">
+                Industrial Bulk Orders & OEM Supplies
+              </h3>
+              <p className="text-blue-100 mb-6">
+                Special pricing for factories, workshops, and dealerships. We supply 210L drums, 
+                custom packaging, and provide technical support for large-scale requirements.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <a
+                  href={companyInfo.social.call}
+                  className="bg-white text-blue-700 px-6 py-3 rounded-lg font-bold hover:bg-gray-100 flex items-center justify-center gap-2"
+                >
+                  <Phone className="w-5 h-5" />
+                  Call for Bulk Quote
+                </a>
+                <a
+                  href={`mailto:${companyInfo.contact.email}?subject=Bulk Order Enquiry`}
+                  className="border-2 border-white text-white px-6 py-3 rounded-lg font-bold hover:bg-white/10 flex items-center justify-center gap-2"
+                >
+                  <Mail className="w-5 h-5" />
+                  Email Requirements
+                </a>
               </div>
             </div>
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { icon: <Truck className="w-6 h-6" />, text: 'Pan-India Delivery' },
+                { icon: <Shield className="w-6 h-6" />, text: 'Quality Certified' },
+                { icon: <Package className="w-6 h-6" />, text: 'Custom Packaging' },
+                { icon: <Award className="w-6 h-6" />, text: 'OEM Approvals' }
+              ].map((item, idx) => (
+                <div key={idx} className="bg-white/10 p-4 rounded-lg backdrop-blur-sm">
+                  <div className="text-amber-300 mb-2">{item.icon}</div>
+                  <div className="font-medium">{item.text}</div>
+                </div>
+              ))}
+            </div>
           </div>
-          
-          {/* Background Pattern */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-premium-amber/20 to-energy-red/20 rounded-full -translate-y-32 translate-x-32"></div>
-        </motion.div>
+        </div>
+
+        {/* Standards Section */}
+        <div className="mt-12 bg-gray-50 rounded-2xl p-8">
+          <h3 className="text-2xl font-bold text-gray-900 text-center mb-6">
+            Our Products Meet International Standards
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {[
+              'IS Standards', 'ISO Standards', 'API Specifications', 
+              'JASO Standards', 'MIL Specs', 'NSF H1'
+            ].map((standard, idx) => (
+              <div key={idx} className="bg-white p-4 rounded-lg text-center shadow hover:shadow-md transition-shadow">
+                <div className="text-blue-600 font-bold text-lg mb-1">{standard}</div>
+                <div className="text-sm text-gray-600">Certified</div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Quick View Modal */}
       <AnimatePresence>
         {selectedProduct && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-            onClick={closeQuickView}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-              onClick={(e) => e.stopPropagation()}
-            >
+          <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
               <div className="p-8">
-                <div className="flex justify-between items-start mb-8">
+                {/* Modal Header */}
+                <div className="flex justify-between items-start mb-6">
                   <div>
-                    <h3 className="text-3xl font-bold text-navy">{selectedProduct.name}</h3>
-                    <div className="flex items-center gap-2 mt-2">
-                      <span className="px-3 py-1 bg-blue-100 text-trust-blue rounded-full">
-                        {selectedProduct.grade}
-                      </span>
-                      <span className="px-3 py-1 bg-amber-100 text-premium-amber rounded-full">
+                    <div className="flex items-center gap-2 mb-2">
+                      {getCategoryIcon(selectedProduct.category)}
+                      <span className={`text-sm font-semibold px-3 py-1 rounded-full border ${getCategoryColor(selectedProduct.category)}`}>
                         {selectedProduct.category.toUpperCase()}
                       </span>
+                      {selectedProduct.isNew && (
+                        <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded">
+                          NEW
+                        </span>
+                      )}
                     </div>
+                    <h3 className="text-3xl font-bold text-gray-900">{selectedProduct.name}</h3>
+                    <p className="text-lg text-gray-600 mt-1">{selectedProduct.grade}</p>
                   </div>
                   <button
                     onClick={closeQuickView}
-                    className="p-2 hover:bg-gray-100 rounded-full"
+                    className="text-gray-500 hover:text-gray-700 p-2 hover:bg-gray-100 rounded-full"
                   >
                     ✕
                   </button>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-8">
+                  {/* Left Column */}
                   <div>
-                    <h4 className="text-xl font-bold mb-4">Full Specifications</h4>
-                    <div className="space-y-3">
-                      {Object.entries(selectedProduct.specs).map(([key, value]) => (
-                        <div key={key} className="flex justify-between border-b pb-2">
-                          <span className="text-gray-600">{key}</span>
-                          <span className="font-semibold">{value}</span>
-                        </div>
-                      ))}
+                    <div className="mb-6">
+                      <h4 className="text-xl font-bold mb-3 text-gray-900">Product Description</h4>
+                      <p className="text-gray-700">{selectedProduct.description}</p>
                     </div>
-                  </div>
 
-                  <div>
-                    <h4 className="text-xl font-bold mb-4">Applications</h4>
-                    <ul className="space-y-2">
-                      {selectedProduct.applications.map((app, i) => (
-                        <li key={i} className="flex items-center">
-                          <Check className="w-5 h-5 text-green-500 mr-2" />
-                          {app}
-                        </li>
-                      ))}
-                    </ul>
-
-                    <div className="mt-6">
-                      <h4 className="text-xl font-bold mb-4">Packaging Options</h4>
+                    <div className="mb-6">
+                      <h4 className="text-xl font-bold mb-3 text-gray-900">Applications</h4>
                       <div className="flex flex-wrap gap-2">
-                        {selectedProduct.packaging.map((pkg) => (
-                          <span key={pkg} className="px-4 py-2 bg-gray-100 rounded-lg">
-                            {pkg}
+                        {selectedProduct.applications.map((app, index) => (
+                          <span key={index} className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg">
+                            {app}
                           </span>
                         ))}
                       </div>
                     </div>
 
-                    <div className="mt-8">
-                      <div className="text-4xl font-bold gradient-text mb-4">{selectedProduct.price}</div>
+                    <div>
+                      <h4 className="text-xl font-bold mb-3 text-gray-900">Packaging Options</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedProduct.packaging.map((pkg) => (
+                          <span key={pkg} className="px-4 py-2 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg font-medium">
+                            {pkg}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Column */}
+                  <div>
+                    <div className="mb-6">
+                      <h4 className="text-xl font-bold mb-3 text-gray-900">Specifications</h4>
+                      <div className="space-y-3">
+                        {Object.entries(selectedProduct.specs).map(([key, value]) => (
+                          <div key={key} className="flex justify-between border-b pb-2">
+                            <span className="text-gray-600">{key}</span>
+                            <span className="font-semibold text-gray-900">{value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="bg-blue-50 p-6 rounded-xl border border-blue-200">
+                      <div className="flex items-center justify-between mb-4">
+                        <div>
+                          <div className="text-3xl font-bold text-blue-600">
+                            {selectedProduct.price}
+                          </div>
+                          <div className="text-gray-600">per {selectedProduct.unit}</div>
+                        </div>
+                        {selectedProduct.featured && (
+                          <div className="flex items-center gap-1">
+                            <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
+                            <span className="font-semibold">Featured Product</span>
+                          </div>
+                        )}
+                      </div>
+                      
                       <button
-                        onClick={() => handleEnquiry(selectedProduct.name)}
-                        className="w-full bg-gradient-to-r from-energy-red to-premium-amber text-white py-4 rounded-xl font-bold text-lg hover:shadow-lg"
+                        onClick={() => {
+                          handleEnquiry(selectedProduct.name);
+                          closeQuickView();
+                        }}
+                        className="w-full bg-green-600 text-white py-3 rounded-lg font-bold text-lg hover:bg-green-700 flex items-center justify-center gap-2"
                       >
-                        Request Quote for {selectedProduct.name}
+                        <ShoppingCart className="w-5 h-5" />
+                        Enquire Now for {selectedProduct.name}
                       </button>
+                      
+                      <div className="mt-4 text-center">
+                        <a 
+                          href={companyInfo.social.call}
+                          className="text-blue-600 hover:text-blue-700 font-medium inline-flex items-center gap-1"
+                        >
+                          <Phone className="w-4 h-4" />
+                          Call: {companyInfo.contact.phone}
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         )}
       </AnimatePresence>
     </section>
