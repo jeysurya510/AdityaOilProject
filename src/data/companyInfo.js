@@ -1,12 +1,13 @@
-// src/config/companyConfig.js
+// src/data/companyInfo.js
+
 export const COMPANY = {
-  // Basic Info - Updated to Aditya
+  // Basic Info
   name: 'Aditya Liquidtools India Private Limited',
   shortName: 'ADITYA LIQUIDTOOLS',
   tagline: 'Authorized Dealer of Industrial Lubricants',
   description: 'We supply high-quality industrial lubricants from trusted brands, ensuring reliable products, timely delivery, and excellent customer support for industrial and commercial applications.',
   
-  // Company History - NEW (Like APAR's "Founded 1958")
+  // Company History
   founded: '2025',
   globalReach: '500+ Cities',
   employees: '50+',
@@ -21,7 +22,7 @@ export const COMPANY = {
   roc: 'ROC - Chennai',
   status: 'Active',
   
-  // Contact Details - 3 Emails
+  // Contact Details
   contact: {
     registeredAddress: 'P1. No. 15, 6th Street, Sri Devi Nagar, Kattupakkam, Tiruvallur, Poonamallee, Tamil Nadu, India, 600056',
     phone: '+91 98408 95637',
@@ -34,17 +35,16 @@ export const COMPANY = {
   },
   
   // Social Media
-// In companyInfo.js - add these if missing
-social: {
-  whatsapp: 'https://wa.me/919840895637',
-  call: 'tel:+919840895637',
-  email: 'mailto:info@aadiyaliquidtools.com',
-  facebook: '#',
-  instagram: '#',
-  linkedin: '#',
-  youtube: '#',
-  twitter: '#'
-},
+  social: {
+    whatsapp: 'https://wa.me/919840895637',
+    call: 'tel:+919840895637',
+    email: 'mailto:info@aadiyaliquidtools.com',
+    facebook: '#',
+    instagram: '#',
+    linkedin: '#',
+    youtube: '#',
+    twitter: '#'
+  },
   
   // Business Hours
   hours: {
@@ -63,7 +63,7 @@ social: {
     industrialGray: '#374151'
   },
   
-  // Features - Updated for Dealership
+  // Features
   features: [
     'Trusted Products',
     'Pan-India Delivery Network',
@@ -73,7 +73,7 @@ social: {
     'Timely Delivery'
   ],
   
-  // Certifications - ISO Placeholder
+  // Certifications
   certifications: [
     'ISO Certification: XXXXXXX',
     'BIS Certified',
@@ -88,7 +88,7 @@ social: {
     pan: 'ABDCA2811Q'
   },
   
-  // NEW: Innovation & Technology (Like APAR's IoT section)
+  // Innovation
   innovation: {
     title: 'Tech-Driven Processes & Smart Operations',
     description: 'Leveraging IoT, real-time data, and predictive analytics to enhance operational efficiency, product quality, and customer service across our supply chain.',
@@ -100,7 +100,7 @@ social: {
     ]
   },
   
-  // NEW: Sustainability (Like APAR's CSR section)
+  // Sustainability
   sustainability: {
     title: 'Commitment to Sustainability',
     description: 'We are committed to sustainable practices that minimize environmental impact while delivering superior products.',
@@ -114,10 +114,12 @@ social: {
 };
 
 export const COMPANY_PRODUCTS = [
-  // Industrial Oils
+  // ============================================
+  // INDUSTRIAL OILS - "Aditya" REMOVED
+  // ============================================
   {
     id: 'ind-01',
-    name: 'Aditya Hydraulic Oil AW 32',
+    name: 'Hydraulic Oil AW 32',  // ✅ REMOVED "Aditya"
     category: 'industrial',
     subCategory: 'hydraulic',
     grade: 'ISO VG 32',
@@ -137,7 +139,7 @@ export const COMPANY_PRODUCTS = [
   },
   {
     id: 'ind-02',
-    name: 'Aditya Gear Oil EP 150',
+    name: 'Gear Oil EP 150',  // ✅ REMOVED "Aditya"
     category: 'industrial',
     subCategory: 'gear',
     grade: 'EP 150',
@@ -157,7 +159,7 @@ export const COMPANY_PRODUCTS = [
   },
   {
     id: 'ind-03',
-    name: 'Aditya Compressor Oil 100',
+    name: 'Compressor Oil 100',  // ✅ REMOVED "Aditya"
     category: 'industrial',
     subCategory: 'compressor',
     grade: 'ISO VG 100',
@@ -176,10 +178,12 @@ export const COMPANY_PRODUCTS = [
     featured: true
   },
 
-  // Automotive Oils
+  // ============================================
+  // AUTOMOTIVE OILS - "Aditya" REMOVED
+  // ============================================
   {
     id: 'auto-01',
-    name: 'Aditya Engine Oil 20W-40',
+    name: 'Engine Oil 20W-40',  // ✅ REMOVED "Aditya"
     category: 'automotive',
     subCategory: 'engine',
     grade: 'API SN 20W-40',
@@ -198,7 +202,7 @@ export const COMPANY_PRODUCTS = [
   },
   {
     id: 'auto-02',
-    name: 'Aditya Diesel Engine Oil 15W-40',
+    name: 'Diesel Engine Oil 15W-40',  // ✅ REMOVED "Aditya"
     category: 'automotive',
     subCategory: 'engine',
     grade: 'API CJ-4 15W-40',
@@ -217,7 +221,7 @@ export const COMPANY_PRODUCTS = [
   },
   {
     id: 'auto-03',
-    name: 'Aditya Gear Oil EP 90',
+    name: 'Gear Oil EP 90',  // ✅ REMOVED "Aditya"
     category: 'automotive',
     subCategory: 'gear',
     grade: 'GL-5 EP 90',
@@ -235,10 +239,12 @@ export const COMPANY_PRODUCTS = [
     featured: false
   },
 
-  // Greases
+  // ============================================
+  // GREASES - "Aditya" REMOVED
+  // ============================================
   {
     id: 'grease-01',
-    name: 'Aditya Multi-Purpose Grease',
+    name: 'Multi-Purpose Grease',  // ✅ REMOVED "Aditya"
     category: 'greases',
     subCategory: 'multipurpose',
     grade: 'NLGI #2',
@@ -257,7 +263,7 @@ export const COMPANY_PRODUCTS = [
   },
   {
     id: 'grease-02',
-    name: 'Aditya EP Grease',
+    name: 'EP Grease',  // ✅ REMOVED "Aditya"
     category: 'greases',
     subCategory: 'ep',
     grade: 'NLGI #2 EP',
@@ -276,7 +282,7 @@ export const COMPANY_PRODUCTS = [
   },
   {
     id: 'grease-03',
-    name: 'Aditya Food Grade Grease',
+    name: 'Food Grade Grease',  // ✅ REMOVED "Aditya"
     category: 'greases',
     subCategory: 'food-grade',
     grade: 'NSF H1',
@@ -295,10 +301,12 @@ export const COMPANY_PRODUCTS = [
     featured: true
   },
 
-  // Specialty Oils
+  // ============================================
+  // SPECIALTY OILS - "Aditya" REMOVED
+  // ============================================
   {
     id: 'spec-01',
-    name: 'Aditya Cutting Oil',
+    name: 'Cutting Oil',  // ✅ REMOVED "Aditya"
     category: 'metal',
     subCategory: 'cutting',
     grade: 'Soluble Type',
@@ -317,7 +325,7 @@ export const COMPANY_PRODUCTS = [
   },
   {
     id: 'spec-02',
-    name: 'Aditya Heat Transfer Oil',
+    name: 'Heat Transfer Oil',  // ✅ REMOVED "Aditya"
     category: 'specialty',
     subCategory: 'heat-transfer',
     grade: 'Thermal 300',
