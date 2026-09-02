@@ -1,469 +1,654 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Shield, Award, Truck, Clock, Users, 
-  Globe, CheckCircle, ChevronRight, Factory,
-  Zap, Target, BarChart, TrendingUp,
-  Star, FileCheck, Gauge, Thermometer,
-  Droplet, Settings, Package
+// src/components/WhyUs.jsx
+
+import React from 'react';
+import { motion } from 'framer-motion';
+
+import {
+  ShieldCheck,
+  Headphones,
+  Settings,
+  PackageCheck,
+  Factory,
+  Layers3,
+  MessageCircle,
+  Phone,
+  ArrowRight,
+  CheckCircle2,
+  Droplets,
+  Target,
+  Truck,
 } from 'lucide-react';
-import { COMPANY } from '../data/companyInfo';
+
+import {
+  COMPANY,
+  PRODUCT_FAMILIES,
+} from '../data/companyInfo';
+
+
+// ============================================================
+// WHY CHOOSE US
+// ============================================================
 
 const WhyUs = () => {
-  const [activeFeature, setActiveFeature] = useState(0);
-  const [stats, setStats] = useState({
-    clients: 0,
-    products: 0,
-    cities: 0,
-    experience: 0
-  });
 
-  // Using COMPANY data
+  // ----------------------------------------------------------
+  // Why Choose Us Features
+  // ----------------------------------------------------------
+
   const features = [
     {
-      icon: <Shield className="w-8 h-8" />,
-      title: "Trusted Quality Products",
-      description: "Authorized dealer of premium lubricants with quality assurance. Every product meets international standards.",
-      color: "from-blue-600 to-cyan-500",
-      badge: "Quality Assured"
+      icon: <ShieldCheck className="w-7 h-7" />,
+      title: 'Quality-Focused Products',
+      description:
+        'We focus on reliable lubrication products selected for industrial and commercial applications.',
     },
+
     {
-      icon: <Award className="w-8 h-8" />,
-      title: "Industry Certifications",
-      description: `Products meeting ${COMPANY.certifications?.join(', ')} standards for maximum reliability and performance.`,
-      color: "from-amber-600 to-orange-500",
-      badge: "Certified"
+      icon: <Settings className="w-7 h-7" />,
+      title: 'Application-Oriented',
+      description:
+        'Products are organized around equipment, applications and industry requirements for easier selection.',
     },
+
     {
-      icon: <Truck className="w-8 h-8" />,
-      title: "Pan-India Distribution",
-      description: "Robust supply chain covering major industrial hubs with dedicated logistics for timely delivery across India.",
-      color: "from-green-600 to-emerald-500",
-      badge: "500+ Cities"
+      icon: <PackageCheck className="w-7 h-7" />,
+      title: 'Focused Product Portfolio',
+      description:
+        'Our portfolio covers industrial lubricants, metal working fluids, specialty lubricants and specialty oils.',
     },
+
     {
-      icon: <Clock className="w-8 h-8" />,
-      title: "24/7 Technical Support",
-      description: "Round-the-clock expert assistance for product selection, troubleshooting, and application-specific guidance.",
-      color: "from-purple-600 to-pink-500",
-      badge: "Support"
+      icon: <Headphones className="w-7 h-7" />,
+      title: 'Direct Customer Support',
+      description:
+        'Our team is available for product enquiries, application discussions, quotations and support.',
     },
+
     {
-      icon: <Users className="w-8 h-8" />,
-      title: "Expert Team",
-      description: "Decades of cumulative experience in lubricant technology and application-specific solutions for Indian conditions.",
-      color: "from-red-600 to-rose-500",
-      badge: "Experts"
+      icon: <Truck className="w-7 h-7" />,
+      title: 'Supply Support',
+      description:
+        'We work to support customer requirements with dependable communication and order coordination.',
     },
+
     {
-      icon: <Truck className="w-8 h-8" />,
-      title: "Reliable Logistics",
-      description: "Efficient supply chain management ensuring timely delivery to your doorstep, anywhere in India.",
-      color: "from-indigo-600 to-violet-500",
-      badge: "Delivery"
-    }
+      icon: <Target className="w-7 h-7" />,
+      title: 'Customer-Focused Approach',
+      description:
+        'We aim to build long-term relationships through responsive service and practical product support.',
+    },
   ];
 
-  const achievements = [
-    { label: "Satisfied Clients", value: "500+", suffix: "+", icon: <Users className="w-6 h-6" /> },
-    { label: "Product Range", value: "50+", suffix: "+", icon: <Package className="w-6 h-6" /> },
-    { label: "Cities Covered", value: "150+", suffix: "+", icon: <Truck className="w-6 h-6" /> },
-    { label: "Years Experience", value: "15+", suffix: "+", icon: <Award className="w-6 h-6" /> }
+
+  // ----------------------------------------------------------
+  // Product Family Data
+  // ----------------------------------------------------------
+
+  const families = PRODUCT_FAMILIES || [
+    {
+      id: 'industrial-lubricants',
+      name: 'Industrial Lubricants',
+      description:
+        'Lubricants for industrial machinery and equipment.',
+    },
+    {
+      id: 'metal-working-fluids',
+      name: 'Metal Working Fluids',
+      description:
+        'Fluids for metal removal, forming, protection and treatment.',
+    },
+    {
+      id: 'specialty-lubricants',
+      name: 'Specialty Lubricants',
+      description:
+        'Specialized lubrication solutions for selected applications.',
+    },
+    {
+      id: 'specialty-oils',
+      name: 'Specialty Oils',
+      description:
+        'Specialty oils for electrical and industrial applications.',
+    },
   ];
 
-  const advantages = [
-    "Custom solutions for specific applications",
-    "Competitive pricing with bulk order discounts",
-    "Comprehensive product documentation & MSDS",
-    "Regular technical training for partners",
-    "Sustainable and eco-friendly product options",
-    "Emergency supply for critical applications"
-  ];
 
-  const qualityParameters = [
-    { name: "Viscosity Index", value: 98, color: "from-blue-500 to-cyan-400" },
-    { name: "Thermal Stability", value: 95, color: "from-green-500 to-emerald-400" },
-    { name: "Oxidation Resistance", value: 96, color: "from-amber-500 to-orange-400" },
-    { name: "Load Capacity", value: 97, color: "from-red-500 to-rose-400" }
-  ];
+  // ----------------------------------------------------------
+  // Contact helpers
+  // ----------------------------------------------------------
 
-  // Animate stats counter
-  useEffect(() => {
-    const targets = { clients: 500, products: 50, cities: 150, experience: 15 };
-    const duration = 2000;
-    const steps = 60;
-    const stepDuration = duration / steps;
+  const phoneNumber = String(
+    COMPANY.phone || COMPANY.contact?.phone || ''
+  ).replace(/\s+/g, '');
 
-    const counters = {};
-    Object.keys(targets).forEach(key => {
-      counters[key] = 0;
-      const stepValue = targets[key] / steps;
-      
-      const interval = setInterval(() => {
-        counters[key] += stepValue;
-        setStats(prev => ({
-          ...prev,
-          [key]: Math.min(Math.floor(counters[key]), targets[key])
-        }));
-        
-        if (counters[key] >= targets[key]) {
-          clearInterval(interval);
-        }
-      }, stepDuration);
-    });
 
-    return () => {
-      Object.keys(counters).forEach(key => {
-        // Cleanup
+  const whatsappLink =
+    COMPANY.social?.whatsapp ||
+    `https://wa.me/${phoneNumber.replace(/\D/g, '')}`;
+
+
+  const scrollToContact = () => {
+    const section = document.getElementById('contact');
+
+    if (section) {
+      section.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
       });
-    };
-  }, []);
+    }
+  };
 
-  // Auto rotate features
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveFeature((prev) => (prev + 1) % features.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [features.length]);
+
+  const scrollToProducts = () => {
+    const section = document.getElementById('products');
+
+    if (section) {
+      section.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  };
+
 
   return (
-    <section id="whyus" className="py-20 bg-gradient-to-b from-white via-gray-50 to-white">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23000' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E")`,
-          backgroundSize: '500px 500px'
-        }}></div>
+    <section
+      id="whyus"
+      className="relative py-20 md:py-28 bg-gradient-to-b from-white via-gray-50 to-white overflow-hidden"
+    >
+
+      {/* ======================================================
+          BACKGROUND
+      ====================================================== */}
+
+      <div className="absolute inset-0 pointer-events-none">
+
+        <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-amber-100/40 blur-3xl" />
+
+        <div className="absolute bottom-0 -left-32 w-96 h-96 rounded-full bg-orange-100/30 blur-3xl" />
+
+        <div
+          className="absolute inset-0 opacity-[0.025]"
+          style={{
+            backgroundImage:
+              'radial-gradient(circle at 1px 1px, #111 1px, transparent 0)',
+            backgroundSize: '32px 32px',
+          }}
+        />
+
       </div>
+
 
       <div className="container mx-auto px-4 relative z-10">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="inline-block mb-4"
-          >
-            <span className="px-6 py-2 bg-gradient-to-r from-amber-500/10 to-orange-500/10 text-amber-700 rounded-full text-sm font-semibold border border-amber-200">
-              WHY CHOOSE {COMPANY.shortName}
+
+        {/* ====================================================
+            HEADER
+        ==================================================== */}
+
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 30,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+          }}
+          transition={{
+            duration: 0.5,
+          }}
+          className="text-center max-w-3xl mx-auto mb-14"
+        >
+
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 text-amber-700 text-sm font-semibold mb-5">
+
+            <ShieldCheck className="w-4 h-4" />
+
+            WHY CHOOSE US
+
+          </div>
+
+
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-5">
+
+            Why Choose{' '}
+
+            <span className="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+              {COMPANY.shortName}
             </span>
-          </motion.div>
-          
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl font-bold mb-6"
-          >
-            The <span className="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">Aditya Advantage</span>
-          </motion.h2>
-          
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-xl text-gray-600 max-w-3xl mx-auto"
-          >
-            Authorized dealer of premium lubricants - Combining quality products with 
-            reliable service and deep industry expertise.
-          </motion.p>
-        </div>
 
-        {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-20"
-        >
-          {achievements.map((achievement, index) => (
-            <motion.div 
-              key={index} 
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.1 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -5 }}
-              className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 text-center hover:shadow-xl transition-all"
-            >
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 mb-4">
-                <div className="text-gray-700">
-                  {achievement.icon}
-                </div>
-              </div>
-              <div className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-                {stats[Object.keys(stats)[index]] || 0}{achievement.suffix}
-              </div>
-              <div className="text-gray-600 font-medium">{achievement.label}</div>
-            </motion.div>
-          ))}
-        </motion.div>
+            ?
 
-        <div className="grid lg:grid-cols-2 gap-12 items-start mb-20">
-          {/* Features Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.03, y: -5 }}
-                className={`relative p-6 rounded-2xl cursor-pointer transition-all duration-300 backdrop-blur-sm ${
-                  activeFeature === index 
-                    ? 'bg-gradient-to-br from-white to-gray-50 shadow-2xl border-2 border-amber-500/30' 
-                    : 'bg-white/80 shadow-lg border border-gray-100 hover:shadow-xl'
-                }`}
-                onClick={() => setActiveFeature(index)}
-              >
-                {feature.badge && (
-                  <span className="absolute -top-2 right-4 px-3 py-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold rounded-full">
-                    {feature.badge}
-                  </span>
-                )}
-                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 shadow-lg`}>
-                  <div className="text-white">
-                    {feature.icon}
-                  </div>
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
-                {activeFeature === index && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="mt-4"
-                  >
-                    <div className="flex items-center text-amber-600 font-semibold">
-                      <ChevronRight className="w-4 h-4 mr-1" />
-                      Active Feature
-                    </div>
-                  </motion.div>
-                )}
-              </motion.div>
-            ))}
-          </div>
+          </h2>
 
-          {/* Active Feature Detail */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeFeature}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-              className="sticky top-24"
-            >
-              <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-8 text-white shadow-2xl">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${features[activeFeature].color} flex items-center justify-center shadow-lg`}>
-                    {features[activeFeature].icon}
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold">{features[activeFeature].title}</h3>
-                    <div className="flex items-center gap-2 mt-1">
-                      <div className="flex">
-                        {[...Array(5)].map((_, i) => (
-                          <Star key={i} className="w-4 h-4 text-amber-400 fill-current" />
-                        ))}
-                      </div>
-                      <span className="text-gray-300 text-sm">Rated 5.0 by Clients</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <p className="text-gray-300 text-lg mb-8 leading-relaxed">
-                  {features[activeFeature].description}
-                </p>
-                
-                <div className="space-y-4">
-                  <h4 className="font-bold text-xl text-white">Key Benefits:</h4>
-                  <ul className="space-y-3">
-                    {advantages.map((advantage, index) => (
-                      <motion.li 
-                        key={index}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="flex items-center gap-3"
-                      >
-                        <CheckCircle className="w-5 h-5 text-amber-400 flex-shrink-0" />
-                        <span className="text-gray-200">{advantage}</span>
-                      </motion.li>
-                    ))}
-                  </ul>
-                </div>
-                
-                <div className="mt-8 pt-8 border-t border-white/10">
-                  <div className="flex flex-wrap gap-4">
-                    <a 
-                      href={COMPANY.social.whatsapp}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 rounded-xl font-semibold hover:opacity-90 transition flex items-center gap-2"
-                    >
-                      <MessageCircle className="w-4 h-4" />
-                      Request Sample
-                    </a>
-                    <button className="px-6 py-3 bg-white/10 rounded-xl font-semibold hover:bg-white/20 transition flex items-center gap-2">
-                      <FileCheck className="w-4 h-4" />
-                      Technical Data Sheets
-                    </button>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Feature Navigation */}
-              <div className="flex justify-center mt-6 gap-2">
-                {features.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setActiveFeature(index)}
-                    className={`w-3 h-3 rounded-full transition-all ${
-                      activeFeature === index 
-                        ? 'bg-amber-500 w-8' 
-                        : 'bg-gray-300 hover:bg-gray-400'
-                    }`}
-                    aria-label={`Go to feature ${index + 1}`}
-                  />
-                ))}
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
 
-        {/* Quality Commitment Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-red-500/10 rounded-3xl p-8 md:p-12 border border-amber-200/50"
-        >
-          <div className="grid lg:grid-cols-3 gap-8 items-center">
-            <div className="lg:col-span-2">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 flex items-center justify-center">
-                  <Award className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-3xl font-bold text-gray-900">Our Quality Commitment</h3>
-              </div>
-              
-              <p className="text-gray-700 text-lg mb-6 leading-relaxed">
-                At {COMPANY.shortName}, we ensure every product meets the highest quality standards. 
-                Our commitment to quality ensures optimal performance in your specific applications.
-              </p>
-              
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {COMPANY.certifications?.map((cert, index) => (
-                  <motion.div
-                    key={index}
-                    whileHover={{ scale: 1.05 }}
-                    className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200"
-                  >
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    <span className="text-sm font-medium">{cert}</span>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-            
-            <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-              <h4 className="font-bold text-xl mb-6 text-gray-900 flex items-center gap-2">
-                <Gauge className="w-5 h-5 text-amber-500" />
-                Quality Parameters
-              </h4>
-              <div className="space-y-6">
-                {qualityParameters.map((param, index) => (
-                  <div key={index}>
-                    <div className="flex justify-between mb-2">
-                      <span className="text-gray-700 font-medium">{param.name}</span>
-                      <span className="font-bold text-gray-900">{param.value}%</span>
-                    </div>
-                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        whileInView={{ width: `${param.value}%` }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1, delay: index * 0.1 }}
-                        className={`h-full rounded-full bg-gradient-to-r ${param.color}`}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Test Parameters */}
-          <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { icon: <Thermometer className="w-5 h-5" />, label: "Temperature Range", value: "-40°C to 300°C" },
-              { icon: <Droplet className="w-5 h-5" />, label: "Viscosity Range", value: "ISO VG 10-1500" },
-              { icon: <Settings className="w-5 h-5" />, label: "Load Capacity", value: "Extreme Pressure" },
-              { icon: <Shield className="w-5 h-5" />, label: "Warranty", value: "Performance Guarantee" }
-            ].map((item, index) => (
-              <div key={index} className="bg-white/80 p-4 rounded-xl border border-gray-200">
-                <div className="text-amber-600 mb-2">{item.icon}</div>
-                <div className="text-sm text-gray-600">{item.label}</div>
-                <div className="font-bold text-gray-900">{item.value}</div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-20 text-center"
-        >
-          <h3 className="text-3xl font-bold mb-6 text-gray-900">
-            Ready to Experience the {COMPANY.shortName} Difference?
-          </h3>
-          <p className="text-gray-600 text-lg mb-8 max-w-2xl mx-auto">
-            Join 500+ satisfied clients who trust our products for their critical applications.
+          <p className="text-lg text-gray-600 leading-relaxed">
+            We combine a focused product portfolio with
+            application-oriented support to make industrial
+            lubrication selection simpler and more reliable.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href={`tel:${COMPANY.contact.phone.replace(/\s+/g, '')}`}
-              className="px-8 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-xl font-bold hover:shadow-lg hover:shadow-amber-500/30 transition flex items-center justify-center gap-2"
+
+        </motion.div>
+
+
+        {/* ====================================================
+            FEATURE GRID
+        ==================================================== */}
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          {features.map((feature, index) => (
+
+            <motion.div
+              key={feature.title}
+              initial={{
+                opacity: 0,
+                y: 30,
+              }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+              }}
+              viewport={{
+                once: true,
+              }}
+              transition={{
+                duration: 0.4,
+                delay: index * 0.07,
+              }}
+              whileHover={{
+                y: -7,
+              }}
+              className="group bg-white rounded-2xl border border-gray-100 p-7 shadow-sm hover:shadow-xl transition-all duration-300"
             >
-              <Phone className="w-5 h-5" />
-              Call Now: {COMPANY.contact.phone}
-            </a>
+
+              {/* Icon */}
+
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 text-amber-600 flex items-center justify-center mb-6 group-hover:from-amber-500 group-hover:to-orange-600 group-hover:text-white transition-all duration-300">
+
+                {feature.icon}
+
+              </div>
+
+
+              {/* Title */}
+
+              <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-amber-600 transition">
+
+                {feature.title}
+
+              </h3>
+
+
+              {/* Description */}
+
+              <p className="text-gray-500 leading-relaxed">
+                {feature.description}
+              </p>
+
+
+              {/* Bottom line */}
+
+              <div className="mt-6 flex items-center gap-2 text-sm font-semibold text-amber-600">
+
+                <span>
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+
+                <div className="h-px flex-1 bg-gray-100 group-hover:bg-amber-200 transition" />
+
+              </div>
+
+            </motion.div>
+
+          ))}
+
+        </div>
+
+
+        {/* ====================================================
+            PRODUCT FAMILIES
+        ==================================================== */}
+
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 30,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+          }}
+          className="mt-20"
+        >
+
+          <div className="grid lg:grid-cols-2 gap-10 items-center">
+
+            {/* Left */}
+
+            <div>
+
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-semibold mb-5">
+
+                <Layers3 className="w-4 h-4" />
+
+                OUR PRODUCT APPROACH
+
+              </div>
+
+
+              <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-5">
+
+                A Focused Range for
+                <span className="block text-amber-600">
+                  Industrial Requirements
+                </span>
+
+              </h3>
+
+
+              <p className="text-gray-600 leading-relaxed mb-7">
+                Our product structure makes it easier to navigate
+                from broad product families to specific products
+                and applications.
+              </p>
+
+
+              <div className="space-y-4">
+
+                {[
+                  'Industrial machinery lubrication',
+                  'Metal working applications',
+                  'Specialized lubrication requirements',
+                  'Specialty oil applications',
+                ].map((item) => (
+
+                  <div
+                    key={item}
+                    className="flex items-center gap-3"
+                  >
+
+                    <CheckCircle2 className="w-5 h-5 text-amber-500 flex-shrink-0" />
+
+                    <span className="text-gray-700">
+                      {item}
+                    </span>
+
+                  </div>
+
+                ))}
+
+              </div>
+
+
+              <button
+                onClick={scrollToProducts}
+                className="mt-8 inline-flex items-center gap-2 px-6 py-3 bg-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800 transition"
+              >
+
+                Explore Product Range
+
+                <ArrowRight className="w-4 h-4" />
+
+              </button>
+
+            </div>
+
+
+            {/* Right */}
+
+            <div className="grid sm:grid-cols-2 gap-4">
+
+              {families.map((family, index) => (
+
+                <motion.div
+                  key={family.id}
+                  whileHover={{
+                    scale: 1.02,
+                  }}
+                  className="p-6 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-lg transition"
+                >
+
+                  <div className="flex items-center justify-between mb-5">
+
+                    <div className="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+
+                      {index === 0 && (
+                        <Factory className="w-5 h-5" />
+                      )}
+
+                      {index === 1 && (
+                        <Settings className="w-5 h-5" />
+                      )}
+
+                      {index === 2 && (
+                        <Droplets className="w-5 h-5" />
+                      )}
+
+                      {index === 3 && (
+                        <Layers3 className="w-5 h-5" />
+                      )}
+
+                    </div>
+
+
+                    <span className="text-xs font-bold text-gray-300">
+                      0{index + 1}
+                    </span>
+
+                  </div>
+
+
+                  <h4 className="font-bold text-gray-900 mb-2">
+                    {family.name}
+                  </h4>
+
+
+                  <p className="text-sm text-gray-500 leading-relaxed">
+                    {family.description}
+                  </p>
+
+                </motion.div>
+
+              ))}
+
+            </div>
+
+          </div>
+
+        </motion.div>
+
+
+        {/* ====================================================
+            SERVICE STRIP
+        ==================================================== */}
+
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 30,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+          }}
+          className="mt-20"
+        >
+
+          <div className="rounded-3xl bg-gray-900 p-7 md:p-10">
+
+            <div className="grid md:grid-cols-3 gap-8">
+
+              {/* Item 1 */}
+
+              <div className="flex items-start gap-4">
+
+                <div className="w-12 h-12 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center flex-shrink-0">
+
+                  <PackageCheck className="w-6 h-6" />
+
+                </div>
+
+
+                <div>
+
+                  <h4 className="font-bold text-white mb-1">
+                    Product Enquiries
+                  </h4>
+
+                  <p className="text-gray-400 text-sm leading-relaxed">
+                    Get information about products, grades and applications.
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              {/* Item 2 */}
+
+              <div className="flex items-start gap-4">
+
+                <div className="w-12 h-12 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center flex-shrink-0">
+
+                  <Settings className="w-6 h-6" />
+
+                </div>
+
+
+                <div>
+
+                  <h4 className="font-bold text-white mb-1">
+                    Application Support
+                  </h4>
+
+                  <p className="text-gray-400 text-sm leading-relaxed">
+                    Discuss your equipment and lubrication requirements with our team.
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              {/* Item 3 */}
+
+              <div className="flex items-start gap-4">
+
+                <div className="w-12 h-12 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center flex-shrink-0">
+
+                  <Headphones className="w-6 h-6" />
+
+                </div>
+
+
+                <div>
+
+                  <h4 className="font-bold text-white mb-1">
+                    Customer Support
+                  </h4>
+
+                  <p className="text-gray-400 text-sm leading-relaxed">
+                    Reach us directly for quotations and order-related support.
+                  </p>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </motion.div>
+
+
+        {/* ====================================================
+            CTA
+        ==================================================== */}
+
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 30,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+          }}
+          className="mt-16 text-center"
+        >
+
+          <h3 className="text-3xl font-bold text-gray-900 mb-4">
+            Need Help Choosing the Right Product?
+          </h3>
+
+
+          <p className="text-gray-600 max-w-2xl mx-auto mb-8">
+            Share your application or equipment requirement
+            with our team and we can help you with your product enquiry.
+          </p>
+
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+
             <a
-              href={COMPANY.social.whatsapp}
+              href={`tel:${phoneNumber}`}
+              className="px-7 py-3.5 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-xl font-bold hover:shadow-lg hover:shadow-amber-500/20 transition flex items-center justify-center gap-2"
+            >
+
+              <Phone className="w-5 h-5" />
+
+              Call Us
+
+            </a>
+
+
+            <a
+              href={whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-bold hover:shadow-lg hover:shadow-green-500/30 transition flex items-center justify-center gap-2"
+              className="px-7 py-3.5 bg-gray-900 text-white rounded-xl font-bold hover:bg-gray-800 transition flex items-center justify-center gap-2"
             >
+
               <MessageCircle className="w-5 h-5" />
+
               WhatsApp Enquiry
+
             </a>
+
+
+            <button
+              onClick={scrollToContact}
+              className="px-7 py-3.5 bg-white text-gray-800 rounded-xl font-bold border-2 border-gray-200 hover:border-amber-500 transition flex items-center justify-center gap-2"
+            >
+
+              Contact Team
+
+              <ArrowRight className="w-5 h-5" />
+
+            </button>
+
           </div>
+
         </motion.div>
+
       </div>
+
     </section>
   );
 };
 
-// Missing icons for the component
-const MessageCircle = ({ className }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-  </svg>
-);
-
-const Phone = ({ className }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-  </svg>
-);
 
 export default WhyUs;

@@ -1,288 +1,177 @@
-import { useState, useRef } from 'react';
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
-import { 
-  Factory, Zap, Gauge, Thermometer, Droplets, 
-  Shield, CheckCircle, Play, Pause, Maximize2,
-  ChevronLeft, ChevronRight, Clock, Users,
-  BarChart, Settings, Award, Cpu, Filter,
-  Truck, Package, TestTube, Microscope,
-  Phone, MapPin, MessageCircle
-} from 'lucide-react';
-import { COMPANY } from '../data/companyInfo';
+// src/components/Facility.jsx
+
+import { motion } from "framer-motion";
+import {
+  Factory,
+  Package,
+  ShieldCheck,
+  Truck,
+  CheckCircle2,
+  Settings,
+  Warehouse,
+  Headphones,
+} from "lucide-react";
 
 const Facility = () => {
-  const [activeSection, setActiveSection] = useState('blending');
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const carouselRef = useRef(null);
-  
-  const progress = useMotionValue(0);
-  const scale = useTransform(progress, [0, 100], [0.8, 1]);
-
-  // Facility sections - Updated for Dealership
-  const sections = [
+  const facilities = [
     {
-      id: 'blending',
-      title: 'Trusted Supply Network',
-      icon: <Settings className="w-6 h-6" />,
-      description: 'Reliable sourcing and distribution of premium lubricants',
-      features: [
-        'Authorized Dealer Network',
-        'Quality Assured Products',
-        'Timely Delivery',
-        'Competitive Pricing',
-        'Technical Support',
-        'Inventory Management'
-      ],
-      capacity: 'Pan-India Coverage',
-      images: ['🏭', '⚙️', '🎛️']
+      icon: <Warehouse className="w-7 h-7" />,
+      title: "Industrial Product Supply",
+      desc: "A focused portfolio of lubrication products for industrial and commercial requirements.",
     },
     {
-      id: 'quality',
-      title: 'Quality Assurance',
-      icon: <Microscope className="w-6 h-6" />,
-      description: 'Products meeting international quality standards',
-      features: [
-        'ISO Certified Products',
-        'Viscosity Testing',
-        'Flash Point Analysis',
-        'Spectroscopic Analysis',
-        'Oxidation Stability Tests',
-        'Water Separation Testing'
-      ],
-      capacity: 'Quality Certified',
-      images: ['🔬', '📊', '🧪']
+      icon: <Settings className="w-7 h-7" />,
+      title: "Application Support",
+      desc: "Product recommendations based on machinery, industry and lubrication applications.",
     },
     {
-      id: 'packaging',
-      title: 'Packaging Solutions',
-      icon: <Package className="w-6 h-6" />,
-      description: 'Custom packaging options for all requirements',
-      features: [
-        'Multiple Packaging Sizes',
-        'Tamper-evident Seals',
-        'Custom Labeling',
-        'Batch Number Printing',
-        'Secure Storage',
-        'Damage-Free Delivery'
-      ],
-      capacity: 'Flexible Packaging',
-      images: ['📦', '🏷️', '📈']
+      icon: <ShieldCheck className="w-7 h-7" />,
+      title: "Quality-Focused Products",
+      desc: "We work with trusted industrial lubrication brands and reliable product sourcing.",
     },
     {
-      id: 'storage',
-      title: 'Storage & Logistics',
-      icon: <Truck className="w-6 h-6" />,
-      description: 'Climate-controlled warehouse with logistics network',
-      features: [
-        'Climate-controlled Storage',
-        'Fire Safety Systems',
-        'Inventory Management',
-        'Fleet of Delivery Vehicles',
-        'Real-time Tracking',
-        'Pan-India Network'
-      ],
-      capacity: 'Efficient Logistics',
-      images: ['🚚', '🏪', '📍']
-    }
+      icon: <Truck className="w-7 h-7" />,
+      title: "Order Coordination",
+      desc: "Responsive communication and dependable support throughout the supply process.",
+    },
   ];
 
-  const activeSectionData = sections.find(s => s.id === activeSection);
-
-  const handlePlayTour = () => {
-    setIsPlaying(true);
-    animate(progress, 100, {
-      duration: 30,
-      onComplete: () => {
-        setIsPlaying(false);
-        progress.set(0);
-      }
-    });
-  };
-
-  const handlePauseTour = () => {
-    setIsPlaying(false);
-    progress.stop();
-  };
+  const capabilities = [
+    "Industrial Lubricants",
+    "Metal Working Fluids",
+    "Specialty Lubricants",
+    "Specialty Oils",
+    "Industry-Specific Solutions",
+    "MRO Product Support",
+  ];
 
   return (
-    <section id="facility" className="py-20 bg-gradient-to-b from-white to-gray-50">
-      <div className="container mx-auto px-4">
-        
-        {/* Section Header */}
+    <section
+      id="facility"
+      className="py-20 md:py-28 bg-gradient-to-b from-gray-50 to-white"
+    >
+      <div className="container mx-auto px-4 max-w-7xl">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center max-w-3xl mx-auto mb-14"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-500/10 to-orange-500/10 rounded-full mb-4">
-            <Factory className="w-4 h-4 text-amber-600" />
-            <span className="text-sm font-semibold text-amber-700">OUR DEALERSHIP</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 text-amber-700 text-sm font-semibold mb-5">
+            <Factory className="w-4 h-4" />
+            OUR FACILITY & SUPPORT
           </div>
-          
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Trusted <span className="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">Lubricant Supplier</span>
+
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-5">
+            Reliable Industrial Supply
           </h2>
-          
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Authorized dealer of premium industrial lubricants, ensuring quality products and timely delivery.
+
+          <p className="text-lg text-gray-600 leading-relaxed">
+            We combine quality-focused product sourcing with responsive customer
+            support to deliver practical lubrication solutions for industrial
+            applications.
           </p>
         </motion.div>
 
-        {/* Facility Showcase */}
-        <div className="mb-16">
-          <div className="grid lg:grid-cols-4 gap-4 mb-8">
-            {sections.map((section) => (
-              <motion.button
-                key={section.id}
-                whileHover={{ y: -5 }}
-                onClick={() => setActiveSection(section.id)}
-                className={`p-6 rounded-2xl text-left transition-all ${
-                  activeSection === section.id
-                    ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-2xl'
-                    : 'bg-white border border-gray-200 hover:border-gray-300 text-gray-700'
-                }`}
+        {/* Feature Grid */}
+        <div className="grid sm:grid-cols-2 gap-6 mb-16">
+          {facilities.map((item, index) => (
+            <motion.div
+              key={item.title}
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.08 }}
+              whileHover={{ y: -5 }}
+              className="bg-white p-7 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all"
+            >
+              <div className="w-14 h-14 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-5">
+                {item.icon}
+              </div>
+
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                {item.title}
+              </h3>
+
+              <p className="text-gray-500 leading-relaxed">{item.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Capability Strip */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="grid lg:grid-cols-2 gap-10 items-center bg-gray-900 rounded-3xl p-8 md:p-10 text-white"
+        >
+          {/* Left */}
+          <div>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-amber-300 text-sm font-semibold mb-5">
+              <Package className="w-4 h-4" />
+              OUR CAPABILITIES
+            </div>
+
+            <h3 className="text-3xl font-bold mb-4">
+              Everything Your Industry Needs
+            </h3>
+
+            <p className="text-gray-300 leading-relaxed">
+              From hydraulic systems and metal working applications to specialty
+              lubricants and MRO support, our solutions are organized around real
+              industrial requirements.
+            </p>
+          </div>
+
+          {/* Right */}
+          <div className="grid sm:grid-cols-2 gap-3">
+            {capabilities.map((item) => (
+              <div
+                key={item}
+                className="flex items-center gap-3 p-4 rounded-xl bg-white/10 border border-white/10"
               >
-                <div className="flex items-center gap-3 mb-3">
-                  <div className={`p-3 rounded-xl ${
-                    activeSection === section.id 
-                      ? 'bg-white/20' 
-                      : 'bg-gradient-to-r from-gray-100 to-gray-50'
-                  }`}>
-                    {section.icon}
-                  </div>
-                  <h3 className="text-lg font-bold">{section.title}</h3>
-                </div>
-                <p className="text-sm opacity-90 mb-3">{section.description}</p>
-                <div className="text-sm font-medium">{section.capacity}</div>
-              </motion.button>
-            ))}
-          </div>
-
-          {/* Active Section Details */}
-          <motion.div
-            key={activeSection}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden"
-          >
-            <div className="bg-gradient-to-r from-gray-900 to-gray-800 p-8 text-white">
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <h3 className="text-3xl font-bold mb-2">{activeSectionData?.title}</h3>
-                  <p className="opacity-90">{activeSectionData?.description}</p>
-                </div>
-                <div className="text-5xl">{activeSectionData?.images[0]}</div>
-              </div>
-            </div>
-
-            <div className="p-8">
-              <div className="grid md:grid-cols-2 gap-6 mb-8">
-                {activeSectionData?.features.map((feature, index) => (
-                  <div key={feature} className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
-                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                    <span className="font-medium">{feature}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Contact CTA */}
-              <div className="bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-2xl border border-amber-200">
-                <h4 className="text-xl font-bold mb-4">Schedule a Visit</h4>
-                <p className="text-gray-700 mb-4">
-                  Interested in our products? Contact us to discuss your requirements.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <a
-                    href={`tel:${COMPANY.contact.phone.replace(/\s+/g, '')}`}
-                    className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-xl font-bold hover:shadow-lg flex items-center justify-center gap-2"
-                  >
-                    <Phone className="w-5 h-5" />
-                    Call: {COMPANY.contact.phone}
-                  </a>
-                  <a
-                    href={COMPANY.social.whatsapp}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-bold hover:shadow-lg flex items-center justify-center gap-2"
-                  >
-                    <MessageCircle className="w-5 h-5" />
-                    WhatsApp Enquiry
-                  </a>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Facility Address */}
-        <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-3xl p-8 text-white mb-16">
-          <div className="grid md:grid-cols-3 gap-8 items-center">
-            <div className="md:col-span-2">
-              <h3 className="text-3xl font-bold mb-4">Visit Our Office</h3>
-              <p className="text-gray-300 mb-6">
-                Located in Tamil Nadu with easy access to major industrial hubs across South India.
-              </p>
-              <div className="flex items-center gap-3 mb-4">
-                <MapPin className="w-5 h-5 text-amber-400" />
-                <span className="text-lg">{COMPANY.contact.registeredAddress}</span>
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="text-6xl mb-4">🏢</div>
-              <div className="font-bold">Corporate Office</div>
-              <div className="text-sm text-gray-300">Tamil Nadu, India</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Certifications */}
-        <div className="text-center mb-16">
-          <h3 className="text-3xl font-bold mb-8">Certifications & Approvals</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {COMPANY.certifications?.map((cert, index) => (
-              <div key={index} className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-                <div className="text-4xl mb-3">🏆</div>
-                <div className="font-bold">{cert}</div>
+                <CheckCircle2 className="w-5 h-5 text-amber-400 flex-shrink-0" />
+                <span className="text-sm">{item}</span>
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
-        {/* Final CTA */}
-        <div className="text-center">
-          <h3 className="text-3xl font-bold mb-6">Ready to Partner with Us?</h3>
-          <p className="text-gray-600 text-lg mb-8 max-w-2xl mx-auto">
-            Contact our sales team for bulk orders, dealership opportunities, or custom requirements.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href={`tel:${COMPANY.contact.phone.replace(/\s+/g, '')}`}
-              className="px-8 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-xl font-bold hover:shadow-lg hover:shadow-amber-500/30 transition flex items-center justify-center gap-2"
-            >
-              <Phone className="w-5 h-5" />
-              Call Now: {COMPANY.contact.phone}
-            </a>
-            <a
-              href={`mailto:${COMPANY.contact.email}`}
-              className="px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-bold hover:shadow-lg hover:shadow-blue-500/30 transition flex items-center justify-center gap-2"
-            >
-              <Mail className="w-5 h-5" />
-              Email: {COMPANY.contact.email}
-            </a>
+        {/* Bottom */}
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-12 grid md:grid-cols-3 gap-5"
+        >
+          <div className="p-6 bg-white rounded-2xl border border-gray-100 text-center">
+            <Factory className="w-9 h-9 text-amber-600 mx-auto mb-3" />
+            <h4 className="font-bold text-gray-900 mb-2">Industrial Focus</h4>
+            <p className="text-sm text-gray-500">
+              Solutions across multiple industrial sectors.
+            </p>
           </div>
-        </div>
+
+          <div className="p-6 bg-white rounded-2xl border border-gray-100 text-center">
+            <Headphones className="w-9 h-9 text-amber-600 mx-auto mb-3" />
+            <h4 className="font-bold text-gray-900 mb-2">Responsive Support</h4>
+            <p className="text-sm text-gray-500">
+              Direct communication for enquiries and quotations.
+            </p>
+          </div>
+
+          <div className="p-6 bg-white rounded-2xl border border-gray-100 text-center">
+            <ShieldCheck className="w-9 h-9 text-amber-600 mx-auto mb-3" />
+            <h4 className="font-bold text-gray-900 mb-2">Reliable Supply</h4>
+            <p className="text-sm text-gray-500">
+              Quality products with dependable order coordination.
+            </p>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
 };
-
-// Add missing Mail icon
-const Mail = ({ className }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-  </svg>
-);
 
 export default Facility;

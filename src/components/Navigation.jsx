@@ -1,319 +1,495 @@
-// src/components/Navbar.jsx
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import {
   Menu,
   X,
-  Phone,
   ChevronDown,
-  MessageCircle,
   Factory,
-  Car,
   Settings,
-  Globe,
-  Users,
-  Award,
-  FileText,
-  Mail
+  Zap,
+  Droplets,
+  Wrench,
+  Building2,
+  Lightbulb,
+  Leaf,
+  Phone,
+  MessageCircle,
 } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+
 import { COMPANY } from '../data/companyInfo.js';
-import logo from '../public/images/logoFin1.png';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [productsOpen, setProductsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState(null);
-  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      setScrolled(window.scrollY > 30);
     };
+
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
-  // Updated nav items - NEW sections added
-  const navItems = [
-    { name: 'Home', path: '/' },
+  const closeMenu = () => {
+    setIsOpen(false);
+    setProductsOpen(false);
+  };
+
+  const scrollToSection = (id) => {
+    closeMenu();
+
+    const element = document.getElementById(id);
+
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  };
+
+  /*
+   * Sends a custom event to Products.jsx.
+   * Products component can listen for this event and activate
+   * the selected product family.
+   */
+  const selectProductFamily = (familyId) => {
+    closeMenu();
+
+    const productsSection = document.getElementById('products');
+
+    if (productsSection) {
+      productsSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+
+    window.setTimeout(() => {
+      window.dispatchEvent(
+        new CustomEvent('selectProductFamily', {
+          detail: {
+            familyId,
+          },
+        })
+      );
+    }, 450);
+  };
+
+  const productItems = [
     {
-      name: 'Products',
-      path: '/products',
-      dropdown: [
-        { name: 'Industrial Oils', icon: <Factory size={16} />, href: '#industrial' },
-        { name: 'Automotive Oils', icon: <Car size={16} />, href: '#automotive' },
-        { name: 'Greases & Lubricants', icon: <Settings size={16} />, href: '#greases' },
-        { name: 'Specialty Oils', icon: '⚡', href: '#specialty' },
-        { name: 'View All Products', href: '#products', highlight: true },
-      ],
+      id: 'industrial-lubricants',
+      name: 'Industrial Lubricants',
+      icon: Factory,
+      description: 'Industrial oils and machinery lubrication',
     },
-    { name: 'About Us', href: '#about' },
-    { name: 'Innovation & Quality', href: '#innovation' }, // NEW
-    { name: 'Sustainability', href: '#sustainability' }, // NEW
-    { name: 'Contact Us', href: '#contact' },
+    {
+      id: 'metal-working-fluids',
+      name: 'Metal Working Fluids',
+      icon: Settings,
+      description: 'Metal removal, forming and treatment fluids',
+    },
+    {
+      id: 'specialty-lubricants',
+      name: 'Specialty Lubricants',
+      icon: Zap,
+      description: 'Specialised lubrication solutions',
+    },
+    {
+      id: 'specialty-oils',
+      name: 'Specialty Oils',
+      icon: Droplets,
+      description: 'Transformer oils, white oils and petroleum jelly',
+    },
   ];
 
-  const isActivePath = (item) => {
-    if (item.href && location.hash === item.href) return true;
-    if (item.path && location.pathname === item.path) return true;
-    return false;
-  };
+  const navItems = [
+    {
+      name: 'Home',
+      id: 'home',
+    },
+    {
+      name: 'Industries',
+      id: 'industries',
+      icon: Building2,
+    },
+    {
+      name: 'MRO',
+      id: 'mro',
+      icon: Wrench,
+    },
+    {
+      name: 'About Us',
+      id: 'about',
+    },
+    {
+      name: 'Innovation',
+      id: 'innovation',
+      icon: Lightbulb,
+    },
+    {
+      name: 'Sustainability',
+      id: 'sustainability',
+      icon: Leaf,
+    },
+    {
+      name: 'Contact',
+      id: 'contact',
+    },
+  ];
 
-  const scrollToSection = (hash) => {
-    if (!hash) return;
-    const el = document.querySelector(hash);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-      setIsOpen(false);
-    }
-  };
+  const phone =
+    COMPANY.phone ||
+    COMPANY.mobile ||
+    COMPANY.contact?.phone ||
+    '';
 
-  const handleNavClick = (item, e) => {
-    if (item.href) {
-      e.preventDefault();
-      if (item.href.startsWith('#')) {
-        scrollToSection(item.href);
-      } else {
-        window.location.href = item.href;
-      }
-    }
-  };
+  const whatsapp =
+    COMPANY.whatsapp ||
+    COMPANY.social?.whatsapp ||
+    '';
 
   return (
     <>
-      {/* TOP CONTACT BAR - Updated with 3 emails */}
-      <div className="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-2 px-4">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2 text-sm">
-          <div className="flex flex-wrap items-center gap-3">
-            <a
-              href={`tel:${COMPANY.contact.phone}`}
-              className="flex items-center gap-2 hover:text-amber-300"
-            >
-              <Phone size={14} />
-              {COMPANY.contact.phone}
-            </a>
-            <span className="hidden sm:inline text-gray-500">|</span>
-            <a
-              href={`mailto:${COMPANY.contact.infoEmail}`}
-              className="hover:text-amber-300 flex items-center gap-1"
-            >
-              <Mail size={14} />
-              {COMPANY.contact.infoEmail}
-            </a>
-          </div>
-          <div className="text-xs flex flex-wrap items-center gap-2">
-            <span className="text-amber-400 font-medium">Authorized Dealer</span>
-            <span className="text-gray-500">•</span>
-            <span>CIN: {COMPANY.cin}</span>
-            <span className="text-gray-500 hidden sm:inline">•</span>
-            <span className="hidden sm:inline">GST: {COMPANY.gst}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* MAIN NAVBAR */}
-      <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
-        className={`sticky top-0 z-50 w-full transition-all ${
-          scrolled
-            ? 'bg-white/95 backdrop-blur shadow-xl py-3'
-            : 'bg-white py-4 border-b'
-        }`}
+      <header
+        className={`
+          fixed
+          left-0
+          right-0
+          top-0
+          z-50
+          border-b
+          transition-all
+          duration-300
+          ${
+            scrolled
+              ? 'border-gray-200 bg-white/95 shadow-lg backdrop-blur-md'
+              : 'border-gray-100 bg-white/90 backdrop-blur-sm'
+          }
+        `}
       >
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between">
-
-            {/* LOGO + COMPANY NAME */}
-            <motion.a
-              href="/"
-              whileHover={{ scale: 1.03 }}
-              className="flex items-center gap-3"
+        <div className="container mx-auto max-w-7xl px-4">
+          <div className="flex h-20 items-center justify-between">
+            {/* LOGO */}
+            <button
+              type="button"
+              onClick={() => scrollToSection('home')}
+              className="flex shrink-0 items-center gap-3 text-left"
             >
-              <img
-                src={logo}
-                alt="Aditya Liquidtools Logo"
-                className="h-16 sm:h-20 w-auto object-contain"
-              />
-              <div className="leading-tight">
-                <div className="text-lg sm:text-xl font-bold text-gray-900 tracking-wide">
-                  ADITYA LIQUIDTOOLS
-                </div>
-                <div className="text-xs sm:text-sm text-gray-600 font-medium">
-                  India Private Limited
-                </div>
-              </div>
-            </motion.a>
+              {COMPANY.logo ? (
+                <img
+                  src={COMPANY.logo}
+                  alt={COMPANY.name || 'Aditya Liquidtools'}
+                  className="h-11 w-auto object-contain"
+                />
+              ) : (
+                <>
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-orange-600">
+                    <Droplets size={22} className="text-white" />
+                  </div>
 
-            {/* DESKTOP MENU */}
-            <div className="hidden lg:flex items-center space-x-1">
-              {navItems.map((item) => (
-                <div key={item.name} className="relative">
-                  {item.dropdown ? (
-                    <>
-                      <button
-                        onMouseEnter={() => setActiveDropdown(item.name)}
-                        onMouseLeave={() => setActiveDropdown(null)}
-                        className={`px-4 py-2 flex items-center gap-1 font-medium ${
-                          isActivePath(item)
-                            ? 'text-amber-600'
-                            : 'text-gray-700 hover:text-amber-600'
-                        }`}
-                      >
-                        {item.name}
-                        <ChevronDown size={16} />
-                      </button>
+                  <div className="leading-tight">
+                    <div className="font-bold text-gray-900">
+                      ADITYA LIQUIDTOOLS
+                    </div>
 
-                      {activeDropdown === item.name && (
-                        <div
-                          onMouseEnter={() => setActiveDropdown(item.name)}
-                          onMouseLeave={() => setActiveDropdown(null)}
-                          className="absolute left-0 top-full mt-2 w-64 bg-white rounded-xl shadow-xl border z-50"
+                    <div className="text-xs text-gray-500">
+                      India Private Limited
+                    </div>
+                  </div>
+                </>
+              )}
+            </button>
+
+            {/* DESKTOP NAV */}
+            <nav className="hidden items-center gap-1 lg:flex">
+              {/* HOME */}
+              <button
+                type="button"
+                onClick={() => scrollToSection('home')}
+                className="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-amber-50 hover:text-amber-600"
+              >
+                Home
+              </button>
+
+              {/* PRODUCTS DROPDOWN */}
+              <div
+                className="relative"
+                onMouseEnter={() => setProductsOpen(true)}
+                onMouseLeave={() => setProductsOpen(false)}
+              >
+                <button
+                  type="button"
+                  onClick={() => setProductsOpen((value) => !value)}
+                  className={`
+                    flex items-center gap-1.5 rounded-lg
+                    px-3 py-2.5 text-sm font-medium
+                    transition
+                    ${
+                      productsOpen
+                        ? 'bg-amber-50 text-amber-600'
+                        : 'text-gray-700 hover:bg-amber-50 hover:text-amber-600'
+                    }
+                  `}
+                >
+                  Products
+
+                  <ChevronDown
+                    size={15}
+                    className={`transition-transform ${
+                      productsOpen ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+
+                {productsOpen && (
+                  <div className="absolute left-1/2 top-full w-80 -translate-x-1/2 pt-3">
+                    <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white p-3 shadow-2xl">
+                      <div className="px-3 pb-3 pt-2">
+                        <p className="text-xs font-bold uppercase tracking-wider text-gray-400">
+                          Product Families
+                        </p>
+                      </div>
+
+                      {productItems.map((product) => {
+                        const Icon = product.icon;
+
+                        return (
+                          <button
+                            key={product.id}
+                            type="button"
+                            onClick={() =>
+                              selectProductFamily(product.id)
+                            }
+                            className="group flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition hover:bg-amber-50"
+                          >
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition group-hover:bg-amber-100 group-hover:text-amber-600">
+                              <Icon size={18} />
+                            </div>
+
+                            <div className="min-w-0">
+                              <p className="text-sm font-semibold text-gray-800 group-hover:text-amber-700">
+                                {product.name}
+                              </p>
+
+                              <p className="mt-0.5 text-xs leading-5 text-gray-400">
+                                {product.description}
+                              </p>
+                            </div>
+                          </button>
+                        );
+                      })}
+
+                      <div className="mt-2 border-t border-gray-100 pt-2">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            scrollToSection('products')
+                          }
+                          className="w-full rounded-xl bg-gray-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
                         >
-                          {item.dropdown.map((sub) => (
-                            <a
-                              key={sub.name}
-                              href={sub.href}
-                              onClick={(e) => handleNavClick(sub, e)}
-                              className={`flex items-center gap-3 px-5 py-3 hover:bg-gray-50 ${
-                                sub.highlight
-                                  ? 'bg-amber-50 text-amber-600 font-semibold'
-                                  : 'text-gray-700'
-                              }`}
-                            >
-                              {sub.icon && <span>{sub.icon}</span>}
-                              {sub.name}
-                            </a>
-                          ))}
-                        </div>
-                      )}
-                    </>
-                  ) : item.href ? (
-                    <a
-                      href={item.href}
-                      onClick={(e) => handleNavClick(item, e)}
-                      className={`px-4 py-2 font-medium ${
-                        isActivePath(item)
-                          ? 'text-amber-600 border-b-2 border-amber-600'
-                          : 'text-gray-700 hover:text-amber-600'
-                      }`}
-                    >
-                      {item.name}
-                    </a>
-                  ) : (
-                    <Link
-                      to={item.path}
-                      className={`px-4 py-2 font-medium ${
-                        isActivePath(item)
-                          ? 'text-amber-600 border-b-2 border-amber-600'
-                          : 'text-gray-700 hover:text-amber-600'
-                      }`}
-                    >
-                      {item.name}
-                    </Link>
-                  )}
-                </div>
-              ))}
+                          View All Products
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
 
-              {/* CTA BUTTONS */}
-              <div className="flex items-center gap-3 ml-6">
+              {/* OTHER NAV ITEMS */}
+              {navItems
+                .filter((item) => item.name !== 'Home')
+                .map((item) => {
+                  const Icon = item.icon;
+
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => scrollToSection(item.id)}
+                      className="flex items-center gap-1.5 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-amber-50 hover:text-amber-600"
+                    >
+                      {Icon && <Icon size={15} />}
+                      {item.name}
+                    </button>
+                  );
+                })}
+            </nav>
+
+            {/* DESKTOP CTA */}
+            <div className="hidden items-center gap-2 lg:flex">
+              {whatsapp && (
                 <a
-                  href={COMPANY.social.whatsapp}
+                  href={`${whatsapp}?text=${encodeURIComponent(
+                    `Hello ${
+                      COMPANY.shortName || 'Aditya Liquidtools'
+                    }, I would like to make an enquiry.`
+                  )}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="bg-green-600 text-white px-5 py-2 rounded-full flex items-center gap-2 hover:bg-green-700 transition"
+                  className="inline-flex items-center gap-2 rounded-xl bg-green-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-green-700"
                 >
-                  <MessageCircle size={18} />
+                  <MessageCircleIcon />
                   WhatsApp
                 </a>
+              )}
 
-                <a
-                  href={COMPANY.social.call}
-                  className="bg-gradient-to-r from-amber-500 to-orange-600 text-white px-6 py-2 rounded-full flex items-center gap-2 font-bold hover:shadow-lg transition"
-                >
-                  <Phone size={18} />
-                  Call Now
-                </a>
-              </div>
+              <button
+                type="button"
+                onClick={() => scrollToSection('contact')}
+                className="inline-flex items-center gap-2 rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-amber-500/20 transition hover:bg-amber-600"
+              >
+                <Phone size={16} />
+                Get in Touch
+              </button>
             </div>
 
-            {/* MOBILE MENU BUTTON */}
+            {/* MOBILE BUTTON */}
             <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="lg:hidden p-2 rounded-lg bg-gray-100"
+              type="button"
+              onClick={() => {
+                setIsOpen((value) => !value);
+
+                if (isOpen) {
+                  setProductsOpen(false);
+                }
+              }}
+              className="flex h-11 w-11 items-center justify-center rounded-xl bg-gray-100 text-gray-700 lg:hidden"
+              aria-label="Toggle navigation menu"
+              aria-expanded={isOpen}
             >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
+              {isOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
         </div>
 
         {/* MOBILE MENU */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden bg-white border-t shadow-lg"
-            >
-              <div className="px-4 py-6 space-y-4">
-                {navItems.map((item) => (
-                  <div key={item.name}>
-                    {item.dropdown ? (
-                      <div className="space-y-2">
-                        <div className="font-medium text-gray-700 px-2 py-1">
-                          {item.name}
-                        </div>
-                        <div className="ml-4 space-y-2">
-                          {item.dropdown.map((sub) => (
-                            <a
-                              key={sub.name}
-                              href={sub.href}
-                              onClick={(e) => {
-                                handleNavClick(sub, e);
-                                setIsOpen(false);
-                              }}
-                              className={`block px-3 py-2 rounded-lg ${
-                                sub.highlight
-                                  ? 'bg-amber-50 text-amber-600 font-semibold'
-                                  : 'text-gray-600 hover:bg-gray-100'
-                              }`}
-                            >
-                              <div className="flex items-center gap-3">
-                                {sub.icon && <span>{sub.icon}</span>}
-                                {sub.name}
-                              </div>
-                            </a>
-                          ))}
-                        </div>
-                      </div>
-                    ) : (
-                      <a
-                        href={item.href}
-                        onClick={(e) => {
-                          handleNavClick(item, e);
-                          setIsOpen(false);
-                        }}
-                        className={`block px-3 py-2 rounded-lg font-medium ${
-                          isActivePath(item)
-                            ? 'bg-amber-50 text-amber-600'
-                            : 'text-gray-700 hover:bg-gray-100'
-                        }`}
+        {isOpen && (
+          <div className="border-t border-gray-100 bg-white shadow-xl lg:hidden">
+            <div className="container mx-auto max-w-7xl px-4 py-4">
+              <div className="space-y-1">
+                {/* HOME */}
+                <button
+                  type="button"
+                  onClick={() => scrollToSection('home')}
+                  className="w-full rounded-xl px-4 py-3 text-left text-gray-700 transition hover:bg-amber-50 hover:text-amber-700"
+                >
+                  Home
+                </button>
+
+                {/* PRODUCTS */}
+                <div>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setProductsOpen((value) => !value)
+                    }
+                    className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-gray-700 transition hover:bg-amber-50 hover:text-amber-700"
+                  >
+                    <span>Products</span>
+
+                    <ChevronDown
+                      size={17}
+                      className={`transition-transform ${
+                        productsOpen ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+
+                  {productsOpen && (
+                    <div className="ml-3 mt-1 space-y-1 rounded-xl bg-gray-50 p-2">
+                      {productItems.map((product) => {
+                        const Icon = product.icon;
+
+                        return (
+                          <button
+                            key={product.id}
+                            type="button"
+                            onClick={() =>
+                              selectProductFamily(product.id)
+                            }
+                            className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-sm text-gray-600 transition hover:bg-white hover:text-amber-700"
+                          >
+                            <Icon size={17} />
+                            <span>{product.name}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                {/* OTHER ITEMS */}
+                {navItems
+                  .filter((item) => item.name !== 'Home')
+                  .map((item) => {
+                    const Icon = item.icon;
+
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() =>
+                          scrollToSection(item.id)
+                        }
+                        className="flex w-full items-center gap-2 rounded-xl px-4 py-3 text-left text-gray-700 transition hover:bg-amber-50 hover:text-amber-700"
                       >
+                        {Icon && <Icon size={17} />}
                         {item.name}
-                      </a>
-                    )}
-                  </div>
-                ))}
+                      </button>
+                    );
+                  })}
+
+                {/* MOBILE CTA */}
+                <div className="grid gap-2 pt-3">
+                  {whatsapp && (
+                    <a
+                      href={`${whatsapp}?text=${encodeURIComponent(
+                        `Hello ${
+                          COMPANY.shortName ||
+                          'Aditya Liquidtools'
+                        }, I would like to make an enquiry.`
+                      )}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={closeMenu}
+                      className="flex items-center justify-center gap-2 rounded-xl bg-green-600 px-4 py-3 font-bold text-white"
+                    >
+                      <MessageCircleIcon />
+                      WhatsApp Enquiry
+                    </a>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => scrollToSection('contact')}
+                    className="flex items-center justify-center gap-2 rounded-xl bg-amber-500 px-4 py-3 font-bold text-white"
+                  >
+                    <Phone size={17} />
+                    Get in Touch
+                  </button>
+                </div>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.nav>
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* Header spacer */}
+      <div className="h-20" />
     </>
   );
 };
+
+/*
+ * Small helper so we don't need another dependency.
+ */
+const MessageCircleIcon = () => (
+  <MessageCircle size={17} />
+);
 
 export default Navigation;

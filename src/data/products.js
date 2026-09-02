@@ -1,7 +1,7 @@
 const products = [
   {
     id: 1,
-    name: "AADIYA TURBO 4T",
+    name: "TURBO 4T",
     grade: "SAE 20W-50",
     category: "automotive",
     price: "₹480",
@@ -29,7 +29,7 @@ const products = [
   },
   {
     id: 2,
-    name: "AADIYA DURATRUCK",
+    name: "DURATRUCK",
     grade: "SAE 15W-40",
     category: "automotive",
     price: "₹520",

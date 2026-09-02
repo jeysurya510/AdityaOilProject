@@ -1,159 +1,255 @@
-// NEW FILE: src/components/SustainabilitySection.jsx
 import { motion } from 'framer-motion';
-import { Leaf, Recycle, TreePine, Droplet, Wind, Sun, Heart, Shield } from 'lucide-react';
+import {
+  Leaf,
+  Recycle,
+  Droplet,
+  ShieldCheck,
+  PackageCheck,
+  Factory,
+  CheckCircle2,
+} from 'lucide-react';
+
+import { COMPANY, PRODUCT_FAMILIES } from '../data/companyInfo.js';
 
 const SustainabilitySection = () => {
-  const initiatives = [
+  const sustainabilityAreas = [
     {
-      icon: <Recycle className="w-8 h-8" />,
-      title: 'Eco-friendly Packaging',
-      description: 'Using sustainable and recyclable packaging materials to reduce environmental impact.',
-      color: 'from-green-500 to-emerald-500'
+      icon: Recycle,
+      title: 'Responsible Packaging',
+      description:
+        'Supporting responsible handling and packaging practices across industrial product supply and order coordination.',
     },
     {
-      icon: <Leaf className="w-8 h-8" />,
-      title: 'Energy Efficient Operations',
-      description: 'Implementing energy-saving technologies and practices across all operations.',
-      color: 'from-emerald-500 to-teal-500'
+      icon: Droplet,
+      title: 'Efficient Product Usage',
+      description:
+        'Application-oriented product selection helps customers choose suitable lubricant solutions for their equipment and operating requirements.',
     },
     {
-      icon: <Droplet className="w-8 h-8" />,
-      title: 'Waste Reduction Programs',
-      description: 'Comprehensive waste management and reduction initiatives throughout our supply chain.',
-      color: 'from-blue-500 to-cyan-500'
+      icon: ShieldCheck,
+      title: 'Quality-Focused Supply',
+      description:
+        'We focus on supplying suitable industrial products with attention to product requirements, handling and customer support.',
     },
     {
-      icon: <Heart className="w-8 h-8" />,
-      title: 'Community Engagement',
-      description: 'Actively participating in community development and social welfare programs.',
-      color: 'from-red-500 to-rose-500'
+      icon: Factory,
+      title: 'Industry Support',
+      description:
+        'Our product portfolio is organised around different industrial applications and sector-specific requirements.',
     },
   ];
 
-  const goals = [
-    { value: '30%', label: 'Carbon Footprint Reduction by 2030' },
-    { value: '50%', label: 'Recyclable Packaging by 2026' },
-    { value: '100%', label: 'Energy Efficient Facilities' },
-    { value: '0', label: 'Waste to Landfill by 2027' },
+  const commitments = [
+    'Application-oriented product selection',
+    'Responsible product handling',
+    'Efficient industrial lubricant usage',
+    'Industry-specific solution support',
+    'MRO maintenance product support',
+    'Customer-focused service and coordination',
   ];
 
   return (
-    <section id="sustainability" className="py-20 bg-gradient-to-b from-white to-gray-50">
-      <div className="container mx-auto px-4">
-        {/* Header */}
+    <section
+      id="sustainability"
+      className="relative overflow-hidden bg-gradient-to-b from-white to-gray-50 py-20 md:py-28"
+    >
+      {/* Background decoration */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -right-32 top-20 h-80 w-80 rounded-full bg-green-100/50 blur-3xl" />
+        <div className="absolute -left-32 bottom-10 h-80 w-80 rounded-full bg-emerald-100/40 blur-3xl" />
+      </div>
+
+      <div className="relative container mx-auto max-w-7xl px-4">
+        {/* HEADER */}
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mx-auto mb-14 max-w-3xl text-center"
+        >
+          <span className="inline-flex items-center gap-2 rounded-full border border-green-200 bg-green-50 px-4 py-2 text-sm font-semibold text-green-700">
+            <Leaf size={16} />
+            SUSTAINABILITY
+          </span>
+
+          <h2 className="mt-5 text-4xl font-bold leading-tight text-gray-900 md:text-5xl">
+            Responsible Approach to
+            <span className="block bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+              Industrial Solutions
+            </span>
+          </h2>
+
+          <p className="mt-5 text-lg leading-relaxed text-gray-600">
+            {COMPANY.shortName || 'Aditya Liquidtools'} aims to support
+            responsible industrial product usage through suitable product
+            selection, application support and customer-focused service.
+          </p>
+        </motion.div>
+
+        {/* SUSTAINABILITY AREAS */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {sustainabilityAreas.map((item, index) => {
+            const Icon = item.icon;
+
+            return (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: 0.5,
+                  delay: index * 0.08,
+                }}
+                whileHover={{ y: -6 }}
+                className="group rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-green-200 hover:shadow-xl"
+              >
+                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 text-green-600 transition-all duration-300 group-hover:bg-green-600 group-hover:text-white">
+                  <Icon size={24} />
+                </div>
+
+                <h3 className="mb-3 text-lg font-bold text-gray-900">
+                  {item.title}
+                </h3>
+
+                <p className="text-sm leading-6 text-gray-600">
+                  {item.description}
+                </p>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* MAIN COMMITMENT BLOCK */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          transition={{ duration: 0.6 }}
+          className="mt-16 overflow-hidden rounded-3xl bg-gray-900"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-full mb-4">
-            <Leaf className="w-4 h-4 text-green-600" />
-            <span className="text-sm font-semibold text-green-700">SUSTAINABILITY</span>
+          <div className="grid lg:grid-cols-2">
+            {/* LEFT */}
+            <div className="p-8 md:p-12">
+              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-green-500 text-white">
+                <Leaf size={25} />
+              </div>
+
+              <h3 className="text-3xl font-bold text-white md:text-4xl">
+                Our Sustainability Approach
+              </h3>
+
+              <p className="mt-5 max-w-xl leading-7 text-gray-300">
+                Sustainability is approached through practical product
+                selection, responsible handling and efficient application of
+                industrial lubricant solutions.
+              </p>
+
+              <div className="mt-8 space-y-3">
+                {commitments.map((item) => (
+                  <div
+                    key={item}
+                    className="flex items-start gap-3 rounded-xl bg-white/5 px-4 py-3"
+                  >
+                    <CheckCircle2
+                      size={19}
+                      className="mt-0.5 shrink-0 text-green-400"
+                    />
+
+                    <span className="text-sm text-gray-200">
+                      {item}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* RIGHT */}
+            <div className="border-t border-white/10 bg-white/5 p-8 md:p-12 lg:border-l lg:border-t-0">
+              <p className="text-sm font-semibold uppercase tracking-wider text-green-400">
+                Product Portfolio
+              </p>
+
+              <h4 className="mt-3 text-2xl font-bold text-white">
+                Four Focused Product Families
+              </h4>
+
+              <p className="mt-3 text-sm leading-6 text-gray-400">
+                Our portfolio is structured to make industrial product
+                selection simpler across different applications.
+              </p>
+
+              <div className="mt-7 space-y-4">
+                {(PRODUCT_FAMILIES || []).map((family, index) => (
+                  <motion.div
+                    key={family.id || family.name || index}
+                    whileHover={{ x: 5 }}
+                    className="flex items-center gap-4 rounded-xl border border-white/10 bg-white/5 px-5 py-4 transition-all hover:border-green-400/40 hover:bg-white/10"
+                  >
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-green-500/10 text-green-400">
+                      <Droplet size={19} />
+                    </div>
+
+                    <span className="font-semibold text-white">
+                      {family.name}
+                    </span>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
           </div>
-          
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Commitment to <span className="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">Sustainability</span>
-          </h2>
-          
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            We are committed to sustainable practices that minimize environmental impact 
-            while delivering superior products to our customers.
-          </p>
         </motion.div>
 
-        {/* Goals */}
+        {/* RESPONSIBLE SUPPLY STRIP */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16"
+          viewport={{ once: true }}
+          className="mt-10 grid gap-4 md:grid-cols-3"
         >
-          {goals.map((goal, index) => (
-            <motion.div
-              key={index}
-              whileHover={{ y: -5 }}
-              className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 text-center"
-            >
-              <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                {goal.value}
-              </div>
-              <div className="text-gray-600 font-medium mt-2">{goal.label}</div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Initiatives */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {initiatives.map((initiative, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ y: -10, scale: 1.02 }}
-              className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-2xl transition-all"
-            >
-              <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${initiative.color} flex items-center justify-center mb-6 shadow-lg`}>
-                <div className="text-white">
-                  {initiative.icon}
-                </div>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">{initiative.title}</h3>
-              <p className="text-gray-600">{initiative.description}</p>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Sustainability Promise */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          className="bg-gradient-to-r from-green-900 to-emerald-900 rounded-3xl p-8 md:p-12 text-white"
-        >
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <TreePine className="w-8 h-8 text-green-400" />
-                <h3 className="text-3xl font-bold">Our Promise</h3>
-              </div>
-              <p className="text-gray-300 text-lg leading-relaxed">
-                We are dedicated to creating a greener, more sustainable future through 
-                responsible business practices, environmental stewardship, and community 
-                engagement. Every product we supply reflects our commitment to quality 
-                and sustainability.
-              </p>
-              <div className="mt-6 flex flex-wrap gap-4">
-                <span className="px-4 py-2 bg-white/10 rounded-full flex items-center gap-2">
-                  <Shield className="w-4 h-4 text-green-400" />
-                  <span className="text-sm">ISO 14001</span>
-                </span>
-                <span className="px-4 py-2 bg-white/10 rounded-full flex items-center gap-2">
-                  <Recycle className="w-4 h-4 text-green-400" />
-                  <span className="text-sm">Recyclable Packaging</span>
-                </span>
-                <span className="px-4 py-2 bg-white/10 rounded-full flex items-center gap-2">
-                  <Wind className="w-4 h-4 text-green-400" />
-                  <span className="text-sm">Carbon Neutral</span>
-                </span>
-              </div>
+          <div className="flex items-center gap-4 rounded-2xl border border-gray-200 bg-white p-5">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-green-50 text-green-600">
+              <PackageCheck size={22} />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white/10 p-4 rounded-xl text-center">
-                <div className="text-3xl font-bold text-green-400">2025</div>
-                <div className="text-sm text-gray-300">Year of Commitment</div>
-              </div>
-              <div className="bg-white/10 p-4 rounded-xl text-center">
-                <div className="text-3xl font-bold text-green-400">100%</div>
-                <div className="text-sm text-gray-300">Sustainable Packaging Goal</div>
-              </div>
-              <div className="bg-white/10 p-4 rounded-xl text-center">
-                <div className="text-3xl font-bold text-green-400">50+</div>
-                <div className="text-sm text-gray-300">Green Initiatives</div>
-              </div>
-              <div className="bg-white/10 p-4 rounded-xl text-center">
-                <div className="text-3xl font-bold text-green-400">0</div>
-                <div className="text-sm text-gray-300">Waste to Landfill Goal</div>
-              </div>
+
+            <div>
+              <h4 className="font-bold text-gray-900">
+                Responsible Supply
+              </h4>
+              <p className="mt-1 text-sm text-gray-500">
+                Focused on customer requirements
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4 rounded-2xl border border-gray-200 bg-white p-5">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-green-50 text-green-600">
+              <ShieldCheck size={22} />
+            </div>
+
+            <div>
+              <h4 className="font-bold text-gray-900">
+                Quality Focus
+              </h4>
+              <p className="mt-1 text-sm text-gray-500">
+                Product and application support
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4 rounded-2xl border border-gray-200 bg-white p-5">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-green-50 text-green-600">
+              <Factory size={22} />
+            </div>
+
+            <div>
+              <h4 className="font-bold text-gray-900">
+                Industrial Solutions
+              </h4>
+              <p className="mt-1 text-sm text-gray-500">
+                Supporting diverse applications
+              </p>
             </div>
           </div>
         </motion.div>
