@@ -13,10 +13,10 @@ import neatCuttingOilImg from '../public/images/neat-cutting-oil.png';
 import waterSolubleCuttingOilImg from '../public/images/water-soluble-cutting-oil.png';
 import quenchOilImg from '../public/images/quenching-oil.png';
 import rustProtectionOilImg from '../public/images/rust-protection-oil.png';
-import drawingFormingOilImg from '../public/images/Drawing-and-forming-oil.png';
-import automotiveEngineOilImg from '../public/images/Automotive-engine-oils.png';
-import automotiveGearOilImg from '../public/images/Automotive-gear-oil.png';
-import transmissionFluidImg from '../public/images/Transmission-fluid.png';
+import drawingFormingOilImg from '../public/images/drawing-and-forming-oil.png';
+import automotiveEngineOilImg from '../public/images/automotive-engine-oils.png';
+import automotiveGearOilImg from '../public/images/automotive-gear-oil.png';
+import transmissionFluidImg from '../public/images/transmission-fluid.png';
 // ============================================================
 // COMPANY INFORMATION
 // ============================================================
