@@ -117,21 +117,21 @@ export const PRODUCT_FAMILIES = [
   {
     id: 'general-lubricants',
     name: 'General Lubricants',
-      image: '/product/hydraulic-oil.jpg', // 👈 Same image (testing)
+      image: '', // 👈 Same image (testing)
     description:
       'Industrial lubricants for machinery, equipment and plant operations.',
   },
   {
     id: 'metal-working-fluids',
     name: 'Metal Working Fluids',
-      image: '/product/hydraulic-oil.jpg', // 👈 Same image (testing)
+      image: '', // 👈 Same image (testing)
     description:
       'Fluids for metal machining, forming, protection and treatment.',
   },
   {
     id: 'automotive-lubricants',
     name: 'Automotive Lubricants',
-      image: '/product/hydraulic-oil.jpg', // 👈 Same image (testing)
+      image: '', // 👈 Same image (testing)
     description:
       'Lubricants for automotive engines, gear systems and transmission.',
   },
