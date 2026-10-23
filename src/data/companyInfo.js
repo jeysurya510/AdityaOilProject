@@ -1,22 +1,23 @@
 // src/data/companyInfo.js
-import hydraulicOilImg from '../public/images/hydraulic-oil.jpg';
-import gearOilImg from '../public/images/gear-oil.png';
-import greaseImg from '../public/images/greased-oil.png';
-import thermicOilImg from '../public/images/thermic-oil.png';
-import turbineOilImg from '../public/images/turbine-oil.png';
-import refrigerationOilImg from '../public/images/refrigeration-oil.png';
-import compressorOilImg from '../public/images/compressor-oil.png';
-import machineOilImg from '../public/images/machine-oil.png';
-import wayLubeOilImg from '../public/images/way-lube-oil.png';
-import spindleOilImg from '../public/images/spindle-oil.png';
-import neatCuttingOilImg from '../public/images/neat-cutting-oil.png';
-import waterSolubleCuttingOilImg from '../public/images/water-soluble-cutting-oil.png';
-import quenchOilImg from '../public/images/quenching-oil.png';
-import rustProtectionOilImg from '../public/images/rust-protection-oil.png';
-import drawingFormingOilImg from '../public/images/drawing-and-forming-oil.png';
-import automotiveEngineOilImg from '../public/images/automotive-engine-oils.png';
-import automotiveGearOilImg from '../public/images/automotive-gear-oil.png';
-import transmissionFluidImg from '../public/images/transmission-fluid.png';
+
+import hydraulicOilImg from '../assets/hydraulic-oil.jpg';
+import gearOilImg from '../assets/gear-oil.png';
+import greaseImg from '../assets/greased-oil.png';
+import thermicOilImg from '../assets/thermic-oil.png';
+import turbineOilImg from '../assets/turbine-oil.png';
+import refrigerationOilImg from '../assets/refrigeration-oil.png';
+import compressorOilImg from '../assets/compressor-oil.png';
+import machineOilImg from '../assets/machine-oil.png';
+import wayLubeOilImg from '../assets/way-lube-oil.png';
+import spindleOilImg from '../assets/spindle-oil.png';
+import neatCuttingOilImg from '../assets/neat-cutting-oil.png';
+import waterSolubleCuttingOilImg from '../assets/water-soluble-cutting-oil.png';
+import quenchOilImg from '../assets/quenching-oil.png';
+import rustProtectionOilImg from '../assets/rust-protection-oil.png';
+import drawingFormingOilImg from '../assets/drawing-and-forming-oil.png';
+import automotiveEngineOilImg from '../assets/automotive-engine-oils.png';
+import automotiveGearOilImg from '../assets/automotive-gear-oil.png';
+import transmissionFluidImg from '../assets/transmission-fluid.png';
 // ============================================================
 // COMPANY INFORMATION
 // ============================================================
